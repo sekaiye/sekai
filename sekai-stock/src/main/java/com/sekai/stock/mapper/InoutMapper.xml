@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sekai.stock.mapper.InoutMapper">
+
+	<resultMap type="com.sekai.stock.model.Inout" id="inoutMap">
+		<id property="id" column="id" />
+		<result column="bill_num" property="billNum" />
+		<result column="bill_date" property="billDate" />
+		<result column="create_user_id" property="createUserId" />
+		<result column="modified_user_id" property="modifiedUserId" />
+		<result column="create_date" property="createDate" />
+		<result column="modified_date" property="modifiedDate" />
+		<association property="createUser" javaType="com.sekai.system.model.User">
+			<id column="create_user_id" property="userId" />
+			<result column="create_nick_name" property="nickName" />
+		</association>
+		<association property="warehouse" javaType="com.sekai.base.model.Warehouse">
+			<id column="wh_id" property="whId" />
+			<result column="wh_code" property="whCode" />
+			<result column="wh_name" property="whName" />
+		</association>
+	</resultMap>
+
+
+	<select id="addInout" parameterType="com.sekai.stock.model.Inout">
+		insert into st_inout(bill_num,bill_date,create_user_id,modified_user_id,
+		create_date,modified_date)
+		values(#{billNum},#{billDate},#{createUserId},#{modifiedUserId},
+		#{createDate},#{modifiedDate})
+	</select>
+	<select id="deleteInout" parameterType="java.lang.Integer">
+		delete from st_inout where id=#{id}
+	</select>
+	<select id="updateInout" parameterType="com.sekai.stock.model.Inout">
+		update st_inout set
+			bill_num=#{inout.billNum},bill_date=#{billDate},
+			create_user_id=#{inout.createUserId},modified_user=#{inout.modifiedUserId},
+			create_date=#{inout.createDate},modified_date=#{inout.modifiedDate}}
+		where id=#{inout.id}
+	</select>
+	<select id="getMaxId" resultType="java.lang.Integer">
+		select max(id) from st_inout
+	</select>
+	<select id="getInout" resultMap="inoutMap">
+		select t.*,w.wh_code,w.wh_name,u.nick_name create_nick_name
+		FROM st_inout t
+		LEFT JOIN base_warehouse w ON t.wh_id=w.wh_id
+		LEFT JOIN sys_user u ON t.create_user_id=u.user_id
+		where t.id=#{id}
+	</select>
+	<select id="getInoutList" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT t.id,t.bill_num billNum,t.bill_date billDate,
+		t.create_date createDate,t.modified_date modifiedDate,
+		w.wh_name whName,t.create_user_id createUserId,u.nick_name createNickName
+		FROM st_inout t
+		LEFT JOIN base_warehouse w ON t.wh_id=w.wh_id
+		LEFT JOIN sys_user u ON t.create_user_id=u.user_id
+		where 1=1 
+		<if test="keyword!=''">
+			and (t.bill_num like '%${keyword}%'
+			or w.wh_name like '%${keyword}%'
+			or u.user_name like '%${keyword}%')
+		</if>
+	 	order by t.id desc
+	</select>
+</mapper>

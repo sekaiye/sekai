@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <script type='text/javascript' src='../jquery.min.js'></script>
+    <script type='text/javascript' src='../jquery.freezeheader.js'></script>
+    <script type='text/javascript' src='../colResizable-1.6.min.js'></script>
+    <script type="text/javascript" src="../laydate/laydate.js"></script>
+    <script type="text/javascript" src="../My97DatePicker/WdatePicker.js"></script>
+    <script type='text/javascript' src='sekai-grid.js'></script>
+    <link rel="stylesheet" href="sekai-grid.css" type="text/css"/>
+</head>
+<body>
+
+<div id="div_sk_grid"></div>
+<script type='text/javascript'>
+    var skGrid=$("#div_sk_grid").SKGrid({
+        columns:[
+            {field:"matNum",title:"物料",width:120,editable:true},
+            {field:"matName",title:"物料名称",width:120,visible:true},
+            {field:"unitPrice",title:"单价", width:70,editable:true},
+            {field:"qty",title:"数量", width:70,editable:true},
+            {field:"totalMoney",title:"金额", width:150,editable:true},
+            {field:"expireDate",title:"失效日期", width:150,editable:true,datefield:true},
+            {field:"remark",title:"备注", width:150,editable:true}
+        ],datas:[
+            {matNum:"CPU",matName:"Intel Xeon 处理器 2.5GMhz",unitPrice:"1500",qty:"2",totalMoney:"300",expireDate:"2018-09-01",remark:""},
+            {matNum:"Kinston",matName:"金士顿",unitPrice:"60",qty:"1",totalMoney:"60",expireDate:"2019-03-01",remark:""},
+            {matNum:"VideoCar",matName:"显卡",unitPrice:"450",qty:"4",totalMoney:"1800",expireDate:"2021-04-07",remark:""},
+            {matNum:"Mouse",matName:"鼠标",unitPrice:"18",qty:"10",totalMoney:"180",expireDate:"2018-09-12",remark:""},
+            {matNum:"CPU",matName:"Intel Xeon 处理器 2.5GMhz",unitPrice:"1500",qty:"2",totalMoney:"300",expireDate:"2018-09-01",remark:""},
+            {matNum:"Kinston",matName:"金士顿",unitPrice:"60",qty:"1",totalMoney:"60",expireDate:"2019-03-01",remark:""},
+            {matNum:"VideoCar",matName:"显卡",unitPrice:"450",qty:"4",totalMoney:"1800",expireDate:"2021-04-07",remark:""},
+            {matNum:"Mouse",matName:"鼠标",unitPrice:"18",qty:"10",totalMoney:"180",expireDate:"2018-09-12",remark:""},
+            {matNum:"CPU",matName:"Intel Xeon 处理器 2.5GMhz",unitPrice:"1500",qty:"2",totalMoney:"300",expireDate:"2018-09-01",remark:""},
+            {matNum:"Kinston",matName:"金士顿",unitPrice:"60",qty:"1",totalMoney:"60",expireDate:"2019-03-01",remark:""},
+            {matNum:"VideoCar",matName:"显卡",unitPrice:"450",qty:"4",totalMoney:"1800",expireDate:"2021-04-07",remark:""},
+            {matNum:"Mouse",matName:"鼠标",unitPrice:"18",qty:"10",totalMoney:"180",expireDate:"2018-09-12",remark:""},
+            {matNum:"CPU",matName:"Intel Xeon 处理器 2.5GMhz",unitPrice:"1500",qty:"2",totalMoney:"300",expireDate:"2018-09-01",remark:""},
+            {matNum:"Kinston",matName:"金士顿",unitPrice:"60",qty:"1",totalMoney:"60",expireDate:"2019-03-01",remark:""},
+            {matNum:"VideoCar",matName:"显卡",unitPrice:"450",qty:"4",totalMoney:"1800",expireDate:"2021-04-07",remark:""},
+            {matNum:"Mouse",matName:"鼠标",unitPrice:"18",qty:"10",totalMoney:"180",expireDate:"2018-09-12",remark:""}
+        ],setButtonEvent: function (rowIndex, cellIndex, field) {
+            var btnEvt = "";
+            if (field == 'matNum') {
+                btnEvt = "alert('这是可以弹窗选择')";
+            }
+            return btnEvt;
+        },setEditable: function (grid_tb_id, rowIndex, cellIndex, field){
+            /*
+            var cells = skGrid.getTable().rows[rowIndex].cells;
+            if(field == "matNum"){
+                if(cells[skGrid.getFieldIndex("qty")].innerHTML > 2){
+                    return false;
+                }
+            }*/
+            return true;
+        },computeRow: function (grid_tb_id, rowIndex, cellIndex){
+            var cells = skGrid.getTable().rows[rowIndex].cells;
+            var _unitPrice=skGrid.getFieldIndex("unitPrice")
+            var _qty=skGrid.getFieldIndex("qty")
+            var _totalMoney=skGrid.getFieldIndex("totalMoney")
+            if (cellIndex == _unitPrice || cellIndex == _qty){
+                var unitPrice = cells[_unitPrice].innerHTML;
+                var qty = cells[_qty].innerHTML;
+                var totalMoney = unitPrice*qty;
+                cells[_totalMoney].innerHTML = totalMoney.toFixed(2);
+            }
+        }
+    });
+    //var _unitPrice=skGrid.getFieldIndex("unitPrice");
+    //alert(_unitPrice);
+</script>
+</body>
+</html>

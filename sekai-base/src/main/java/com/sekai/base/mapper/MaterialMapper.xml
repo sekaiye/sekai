@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sekai.base.mapper.MaterialMapper">
+	<select id="addMaterial" parameterType="com.sekai.base.model.Material">
+		insert into base_material(mat_code,mat_name,
+		spec,unit,mat_class,forbid,
+		mat_define1,mat_define2,mat_define3,mat_define4,mat_define5,
+		mat_define6,mat_define7,mat_define8,mat_define9,mat_define10)
+		values(#{inv.matCode}, #{inv.matName},  
+		#{inv.spec}, #{inv.unit},#{inv.matClass},#{inv.forbid},
+		#{inv.matDefine1}, #{inv.matDefine2},#{inv.matDefine3}, #{inv.matDefine4},#{inv.matDefine5},
+		#{inv.matDefine6}, #{inv.matDefine7},#{inv.matDefine8}, #{inv.matDefine9},#{inv.matDefine10})
+	</select>
+	<select id="deleteMaterial" parameterType="java.lang.Integer">
+		delete from base_material where mat_id=#{matId}
+	</select>
+	<select id="updateMaterial" parameterType="com.sekai.base.model.Material">
+		update base_material set
+			mat_code=#{inv.matCode},mat_name=#{inv.matName},spec=#{inv.spec},
+			unit=#{inv.unit},mat_class=#{inv.matClass},forbid=#{inv.forbid},
+			mat_define1=#{inv.matDefine1},mat_define2=#{inv.matDefine2},
+			mat_define3=#{inv.matDefine3},mat_define4=#{inv.matDefine4},
+			mat_define5=#{inv.matDefine5},mat_define6=#{inv.matDefine6},
+			mat_define7=#{inv.matDefine7},mat_define8=#{inv.matDefine8},
+			mat_define9=#{inv.matDefine9},mat_define10=#{inv.matDefine10}
+		where mat_id=#{inv.matId}
+	</select>
+	<select id="getMaxId" resultType="java.lang.Integer">
+		select max(mat_id) from base_material
+	</select>
+	<select id="getMaterial" parameterType="java.lang.Integer" resultType="com.sekai.base.model.Material">
+		select * from base_material where mat_id=#{matId}
+	</select>
+	<select id="getMaterialList" resultType="java.util.Map" parameterType="java.util.Map">
+		select mat_id AS matId,mat_code AS matCode,mat_name AS matName,
+		spec,unit,mat_class AS matClass
+		from base_material t where 1=1 
+		<if test="keyword!=''">
+			and (mat_code like '%${keyword}%'
+			or mat_name like '%${keyword}%')
+		</if>
+	 	order by mat_code asc
+	</select>
+</mapper>

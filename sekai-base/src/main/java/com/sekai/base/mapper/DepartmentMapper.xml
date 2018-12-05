@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sekai.base.mapper.DepartmentMapper">
+	<resultMap type="com.sekai.base.model.Department" id="deptMap">
+		<id column="dept_id" property="deptId" />
+		<result column="dept_code" property="deptCode" />
+		<result column="dept_name" property="deptName" />
+		<result column="forbid" property="forbid" />
+		<result column="forbid_name" property="forbidName" />
+		<association property="parent" javaType="com.sekai.base.model.Department">
+			<id column="parent_id" property="deptId"/>
+			<result column="parent_name" property="deptName"/>
+		</association>
+	</resultMap>
+	<select id="addDepartment" parameterType="com.sekai.base.model.Department">
+		insert into base_department(dept_code,dept_name,
+		parent_id,forbid)
+		values(#{dept.deptCode}, #{dept.deptName},
+		#{dept.parentId},#{dept.forbid})
+	</select>
+	<select id="deleteDepartment" parameterType="java.lang.Integer">
+		delete from base_department where dept_id=#{deptId}
+	</select>
+	<select id="updateDepartment" parameterType="com.sekai.base.model.Department">
+		update base_department set
+			dept_code=#{dept.deptCode},dept_name=#{dept.deptName},
+			parent_id=#{dept.parentId},forbid=#{dept.forbid}
+		where dept_id=#{dept.deptId}
+	</select>
+	<select id="getMaxId" resultType="java.lang.Integer">
+		select max(dept_id) from base_department
+	</select>
+	<select id="getDepartment" parameterType="java.lang.Integer" resultMap="deptMap">
+		select t.*,p.dept_name as parent_name from base_department t 
+		left join base_department p on t.parent_id=p.dept_id
+		where t.dept_id=#{deptId}
+	</select>
+	<select id="getDepartmentList" resultType="java.util.Map" parameterType="java.util.Map">
+		select t.dept_id as deptId,t.dept_code as deptCode,
+		t.dept_name deptName,t.parent_id parentId,p.dept_name as parentName,
+		case when t.forbid=1 then '是' else '否' end forbidName 
+		from base_department t
+		left join base_department p on t.parent_id=p.dept_id
+		where 1=1 
+		<if test="keyword!=''">
+			and (t.dept_code like '%${keyword}%'
+			or t.dept_name like '%${keyword}%')
+		</if>
+	 	order by t.dept_code asc
+	</select>
+</mapper>

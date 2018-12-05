@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+    <!-- 使用spring组件扫描@service  -->
+    <context:component-scan base-package="com.sekai.system.service"/>
+    <!-- 自定义域realm -->
+    <bean id="shiroRealm" class="com.sekai.system.utils.ShiroRealm"></bean>
+    <!-- 安全管理器  ref对象-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+    	<!--认证管理器-->
+        <property name="realm" ref="shiroRealm"/>
+        <!-- 缓存管理器 -->
+        <property name="cacheManager" ref="shiroCacheManager" />
+    </bean>
+ 	<!--缓存管理器实现类，这里用的是系统自带的-->
+    <bean id="shiroCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
+    <!-- shiro filter -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- 安全管理器必须的 -->
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 身份认证失败   认证提交的地址 -->
+        <property name="loginUrl" value="/login"/>
+        <!-- 权限认证失败    没有权限认证提交的地址 -->
+        <property name="unauthorizedUrl" value="/login"/>
+
+        <!-- Shiro连接约束配置,即过滤链的定义 -->
+        <property name="filterChainDefinitions">
+            <value>
+            	/system/**=authc
+            </value>
+        </property>
+    </bean>
+    <!-- Shiro生命周期处理器 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+</beans>

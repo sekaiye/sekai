@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sekai.stock.mapper.InoutsMapper">
+
+	<resultMap type="com.sekai.stock.model.Inouts" id="inoutsMap">
+		<id property="ids" column="ids" />
+		<result column="id" property="id" />
+		<result column="mat_id" property="matId" />
+		<result column="qty" property="qty" />
+		<result column="price" property="price" />
+		<result column="taxprice" property="taxprice" />
+		<result column="amount" property="amount" />
+		<result column="taxamount" property="taxamount" />
+		<result column="tax" property="tax" />
+		<result column="remark" property="remark" />
+		<association property="material" javaType="com.sekai.base.model.Material">
+			<id column="mat_id" property="matId" />
+			<result column="mat_code" property="matCode" />
+			<result column="mat_name" property="matName" />
+		</association>
+	</resultMap>
+
+	<select id="addInouts" parameterType="com.sekai.stock.model.Inouts">
+		insert into st_inouts(id,mat_id,qty,price,taxprice,
+		amount,taxamount,tax,remark)
+		values(#{id},#{mat_id},#{qty},#{price},#{taxprice},
+		#{amount},#{taxamount},#{tax},#{remark})
+	</select>
+	<select id="deleteInouts" parameterType="java.lang.Integer">
+		delete from st_inouts where id=#{id}
+	</select>
+	<select id="updateInouts" parameterType="com.sekai.stock.model.Inouts">
+		update st_inouts
+		<trim prefix="set" suffixOverrides=",">
+			<if test="inouts.id!=null">id=#{inouts.id},</if>
+			mat_id=#{inouts.matId},qty=#{inouts.qty},
+			price=#{inouts.price},taxprice=#{inouts.taxprice},
+			amount=#{inouts.amount},taxamount=#{inouts.taxamount},
+			price=#{inouts.price},taxprice=#{inouts.taxprice},
+			<if test="inouts.remark!=null">remark=#{inouts.remark},</if>
+		</trim>
+		where ids=#{inouts.ids}
+	</select>
+	<select id="getMaxId" resultType="java.lang.Integer">
+		select max(id) from st_inouts
+	</select>
+	<select id="getInouts" resultMap="inoutsMap">
+		select t.*
+		FROM st_inouts t
+		where t.id=#{id}
+	</select>
+	<select id="getInoutsByBillId" resultType="java.util.Map" parameterType="java.lang.Integer">
+		SELECT t.id,t.ids,t.mat_id matId,t.qty,
+		t.price,t.taxprice,t.amount,t.taxamount,t.tax,t.remark,
+		m.mat_code matCode,m.mat_name matName,m.unit,m.spec
+		FROM st_inouts t
+		LEFT JOIN base_material m ON t.mat_id=m.mat_id
+		WHERE 1=1 
+		AND t.id=#{id}
+		ORDER BY t.ids ASC
+	</select>
+</mapper>

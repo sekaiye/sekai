@@ -1,0 +1,71 @@
+﻿.sk-grid-panel{
+	clear:both;
+}
+.sk-grid a {
+    color: #c75f3e; 
+} 
+.sk-grid a:hover {
+	color: #ff6600;
+}
+
+.sk-grid
+{	
+    margin-left:0px;
+    margin-top:0px;
+    padding: 0;
+    background: #FFF;
+    
+    text-align: center;
+    
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+.sk-grid td,th
+{
+    font-family:"微软雅黑";
+    font-size:16px!important;
+    border: 1px solid #eeecec;
+    height: 35px;
+    word-break:break-all; word-wrap:break-word;
+    /*
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;*/
+}
+.sk_toolbar {
+    /*background: #fff url(images/bg-header-grid.png) bottom repeat-x;*/
+    height:30px;
+}
+.sk_header {
+    /*background: #fff url(images/bg-header-grid.png) bottom repeat-x;*/
+    background-color:#f6f1f1;/*#eeecec*/
+    height:20px;
+    
+}
+.sk_header th{
+	text-align:center;
+}
+.sk_select {
+    background-image:url(images/ref.gif);
+    float:left;width:18px;height:18px;
+    cursor:pointer;
+}
+/*
+.sk_table_bar {
+    text-align:left;
+}
+.sk_table_bar input {
+    margin-right:2px;
+}*/
+.sk_toolbar_btn {
+    border:solid 1px #eeecec;
+    background-color:#f6f1f1;
+    cursor:pointer;
+}
+.sk-chk {
+    
+}
+.sk-input{
+	
+}

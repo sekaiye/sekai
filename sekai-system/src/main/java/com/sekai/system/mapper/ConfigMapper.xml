@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sekai.system.mapper.ConfigMapper">
+	<select id="addConfig" parameterType="com.sekai.system.model.Config">
+		insert into sys_config(cf_code,cf_name,cf_value,is_system)
+		values(#{config.cfCode}, #{config.cfName}, #{config.cfValue},#{config.isSystem})
+	</select>
+	<select id="deleteConfig" parameterType="java.lang.Integer">
+		delete from sys_config where id=#{id}
+	</select>
+	<select id="updateConfig" parameterType="com.sekai.system.model.Config">
+		update sys_config set
+		cf_code=#{config.cfCode},
+		cf_name=#{config.cfName},
+		cf_value=#{config.cfValue}
+		<if test="config.isSystem!=null">
+		,is_system=#{config.isSystem}
+		</if>
+		where id=#{config.id}
+	</select>
+	<select id="getMaxId" resultType="java.lang.Integer">
+		select max(id) from sys_config
+	</select>
+	<select id="getConfig" parameterType="java.lang.Integer" resultType="com.sekai.system.model.Config">
+		select * from sys_config where id=#{id}
+	</select>
+	<select id="getConfigByCode" parameterType="java.lang.String" resultType="com.sekai.system.model.Config">
+		select * from sys_config where cf_code=#{cfCode}
+	</select>
+	<select id="getConfigList" resultType="java.util.Map" parameterType="java.util.Map">
+		select id,cf_code cfCode,cf_name cfName,cf_value cfValue,is_system isSystem
+		from sys_config where 1=1 
+		<if test="keyword!=''">
+			and (cf_code like '%${keyword}%'
+			or cf_name like '%${keyword}%')
+		</if>
+	 	order by cf_code
+	</select>
+	<select id="getAllConfigs" resultType="com.sekai.system.model.Config">
+		select * from sys_config
+	 	order by cf_code
+	</select>
+</mapper>

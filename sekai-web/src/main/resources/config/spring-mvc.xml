@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+
+	<!-- 导入shiro的相关配置 -->
+    <import resource="classpath:config/spring-shiro.xml" />
+    <mvc:default-servlet-handler/>
+	<!-- 配置自动扫描的包 -->
+	<context:annotation-config></context:annotation-config>
+	<context:component-scan base-package="com.sekai.*"></context:component-scan>
+	<!-- 开启注解 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">-->
+			<bean id="stringHttpMessageConverter"
+				class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=UTF-8</value>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+            <bean id="jsonHttpMessageConverter"  
+		        class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">  
+		        <property name="supportedMediaTypes">  
+		            <list>  
+		                <value>application/json;charset=UTF-8</value>  
+		            </list>  
+		        </property>  
+		    </bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- 配置静态资源，直接映射到对应的文件夹，不被DispatcherServlet处理，3.04新增功能，需要重新设置spring-mvc-3.0.xsd -->
+	<mvc:resources mapping="/img/**" location="/img/" />
+	<mvc:resources mapping="/js/**" location="/js/" />
+	<mvc:resources mapping="/css/**" location="/css/" />
+	<mvc:resources mapping="/html/**" location="/html/" />
+	<mvc:resources mapping="/ui/**" location="/ui/" />
+	<!-- 拦截器 -->
+	<!--<mvc:interceptors> -->
+		<!-- 登录与权限控制 -->
+		<!-- <mvc:interceptor> -->
+			<!-- 需拦截的地址 -->
+			<!-- <mvc:mapping path="/**"/> -->
+			<!-- 需排除拦截的地址 -->
+			<!-- <mvc:exclude-mapping path="/login"/> -->
+			<!-- <bean class="com.sekai.system.utils.AuthInterceptor"></bean>  -->
+	<!-- 	</mvc:interceptor>
+	</mvc:interceptors>-->
+
+	<!-- 配置视图解析器 如何把handler 方法返回值解析为实际的物理视图 -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	<!-- 文件上传解析器 id 必须为multipartResolver -->
+	<bean id="multipartResolver" 
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 上传文件大小上限，单位为字节（10MB） -->
+        <property name="maxUploadSize">  
+            <value>10485760</value>  
+        </property>  
+        <!-- 请求的编码格式，必须和jSP的pageEncoding属性一致，以便正确读取表单的内容，默认为ISO-8859-1 -->
+        <property name="defaultEncoding">
+            <value>UTF-8</value>
+        </property>
+	</bean>
+	<!-- 开启shiro注解-->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+          depends-on="lifecycleBeanPostProcessor">
+        <property name="proxyTargetClass" value="true" />
+    </bean>
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
+    </bean>
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+	    <property name="exceptionMappings">  
+	        <props>  
+	            <prop key="org.apache.shiro.authz.UnauthorizedException">
+	                system/role_permission/not_have_permission
+	            </prop>  
+	            <!--<prop key="org.apache.shiro.authz.UnauthenticatedException">
+	            </prop>-->
+	        </props>  
+	    </property>  
+	</bean> 
+</beans>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sekai.system.mapper.MenuMapper">
+	<select id="getMenu" parameterType="java.lang.Integer" resultType="com.sekai.system.model.Menu">
+		select * from sys_menu where menu_id=#{menuId}
+	</select>
+	<select id="getAllMenus" resultType="com.sekai.system.model.Menu" parameterType="java.util.Map">
+		SELECT menu_id AS menuId,menu_code AS menuCode,
+		permission_code as permissionCode,
+		menu_name AS menuName,url,sort,parent_code AS parentCode
+		FROM sys_menu
+		where 1=1 
+		<if test="parentCode!=''">
+			and parent_code=#{parentCode}
+		</if>
+	 	order by sort asc
+	</select>
+	<select id="getMenusByUser" resultType="java.util.Map" parameterType="java.util.Map">
+		select * from sys_menu where 1=1 
+	 	order by sort asc
+	</select>
+</mapper>

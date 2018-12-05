@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sekai.system.mapper.UserMapper">
+
+	<!-- 在各种标签中的id属性必须和接口中的方法名相同 ， id属性值必须是唯一的，不能够重复使用。parameterType属性指明查询时使用的参数类型，resultType属性指明查询返回的结果集类型 -->
+	<!-- useGeneratedKeys：（ 仅 对 insert 有 用 ） 这 会 告 诉 MyBatis 使 用 JDBC 的getGeneratedKeys 
+		方法来取出由数据（比如：像 MySQL 和 SQLServer 这样的数据库管理系统的自动递增字段）内部生成的主键。默认值： false。 -->
+	<!--keyProperty： （仅对 insert有用）标记一个属性， MyBatis 会通过 getGeneratedKeys或者通过 insert 
+		语句的 selectKey 子元素设置它的值。默认：不设置。 -->
+	<!--#{}中的内容，为占位符，当参数为某个JavaBean时，表示放置该Bean对象的属性值 -->
+	<select id="addUser" parameterType="com.sekai.system.model.User">
+		insert into sys_user(user_name,nick_name,pwd,
+		email,cellphone,forbid)
+		values(#{user.userName}, #{user.nickName}, #{user.pwd}, #{user.email}, 
+		#{user.cellphone},#{user.forbid})
+	</select>
+	<select id="deleteUser" parameterType="java.lang.Integer">
+		delete from sys_user where user_id=#{userId}
+	</select>
+	<select id="updateUser" parameterType="com.sekai.system.model.User">
+		update sys_user set
+		user_name=#{user.userName},
+		nick_name=#{user.nickName},
+		<if test="user.forbid!=null">
+			forbid=#{user.forbid},
+		</if>
+		<if test="user.pwd!=null and user.pwd!=''">
+			pwd=#{user.pwd},
+		</if>
+		email=#{user.email},
+		cellphone=#{user.cellphone}
+		where user_id=#{user.userId}
+	</select>
+	<select id="updatePassword">
+		update sys_user set
+		pwd=#{pwd}
+		where user_id=#{userId}
+	</select>
+	<select id="getMaxId" resultType="java.lang.Integer">
+		select max(user_id) from sys_user
+	</select>
+	<!--  databaseId="mysql"-->
+	<select id="getUser" parameterType="java.lang.Integer" resultType="com.sekai.system.model.User">
+		select * from sys_user where user_id=#{userId}
+	</select>
+	<!-- parameterType="com.sekai.utils.Page" statementType="STATEMENT" -->
+	<select id="getUserList" resultType="java.util.Map" parameterType="java.util.Map" >
+		select t.user_id userId,t.user_name userName,t.nick_name nickName,
+		t.email,t.cellphone,
+		case when t.forbid=1 then '是' else'否' end as forbid
+		from sys_user t where 1=1 
+		<if test="keyword!=null">
+			and (t.user_name like '%${keyword}%'
+			or t.nick_name like '%${keyword}%'
+			or t.email like '%${keyword}%'
+			or t.cellphone like '%${keyword}%')
+		</if>
+	 	order by t.user_id desc
+	</select>
+	<select id="checkExistUserName" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select count(*) from sys_user where user_name=#{userName}
+	</select>
+	<select id="getUserByUserName" parameterType="java.lang.String" resultType="com.sekai.system.model.User">
+		select * from sys_user where user_name=#{userName}
+	</select>
+		<select id="checkUserLogin" resultType="java.lang.Integer">
+		select count(*) from sys_user where user_name=#{userName} and pwd=#{pwd}
+	</select>
+</mapper>

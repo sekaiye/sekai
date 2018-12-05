@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sekai.system.mapper.RolePermissionMapper">
+	<select id="addRolePermission" parameterType="com.sekai.system.model.RolePermission">
+		insert into sys_role_permission(permission_id,role_id)
+		values(#{rolePermission.permissionId}, #{rolePermission.roleId})
+	</select>
+	<select id="deleteRolePermission" parameterType="java.lang.Integer">
+		delete from sys_role_permission where rp_id=#{rpId}
+	</select>
+	<select id="deleteRolePermissionByRoleId" parameterType="java.lang.Integer">
+		delete from sys_role_permission where role_id=#{roleId}
+	</select>
+	<select id="getMaxId" resultType="java.lang.Integer">
+		select max(ra_id) from sys_role_permission
+	</select>
+	<select id="getRolePermission" parameterType="java.lang.Integer" resultType="com.sekai.system.model.RolePermission">
+		select * from sys_role_permission where ra_id=#{raId}
+	</select>
+	<select id="checkUserHasPermission" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM sys_user_role ur 
+		LEFT JOIN sys_role_permission ra ON ur.role_id=ra.role_id
+		LEFT JOIN sys_permission a ON ra.permission_id=a.permission_id
+		WHERE ur.user_id=#{userId} 
+		AND a.permission_code=#{permissionCode}
+	</select>
+	<select id="getRolePermissionList" resultType="java.util.Map" parameterType="java.lang.Integer">
+		SELECT p.permission_id AS permissionId,p.permission_code AS permissionCode,
+		p.permission_name AS permissionName,
+		p.parent_code AS parentCode,
+		CASE WHEN rp.permission_id IS NULL THEN 0 ELSE 1 END AS hasPermission
+		FROM sys_permission p
+		LEFT JOIN sys_role_permission rp ON p.permission_id=rp.permission_id 
+		and rp.role_id=#{roleId}
+		where 1=1 
+		ORDER BY p.permission_code
+	</select>
+</mapper>

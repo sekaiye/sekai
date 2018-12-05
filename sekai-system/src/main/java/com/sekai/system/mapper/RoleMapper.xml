@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sekai.system.mapper.RoleMapper">
+	<resultMap type="java.util.Map" id="roleMap">
+		<id column="roleId" property="roleId" />
+		<result column="roleCode" property="roleCode" />
+		<result column="roleName" property="roleName" />
+	</resultMap>
+	<select id="addRole" parameterType="com.sekai.system.model.Role">
+		insert into sys_role(role_code,role_name)
+		values(#{role.roleCode}, #{role.roleName})
+	</select>
+	<select id="deleteRole" parameterType="java.lang.Integer">
+		delete from sys_role where role_id=#{roleId}
+	</select>
+	<select id="updateRole" parameterType="com.sekai.system.model.Role">
+		update sys_role set
+		role_code=#{role.roleCode},
+		role_name=#{role.roleName}
+		where role_id=#{role.roleId}
+	</select>
+	<select id="getMaxId" resultType="java.lang.Integer">
+		select max(role_id) from sys_role
+	</select>
+	<select id="getRole" parameterType="java.lang.Integer" resultType="com.sekai.system.model.Role">
+		select * from sys_role where role_id=#{roleId}
+	</select>
+	<select id="getRoleList" resultType="java.util.Map" parameterType="java.util.Map">
+		select role_id roleId,role_code roleCode,role_name roleName
+		from sys_role where 1=1 
+		<if test="keyword!=''">
+			and (role_code like '%${keyword}%'
+			or role_name like '%${keyword}%')
+		</if>
+	 	order by role_code
+	</select>
+	<select id="getAllRoles" resultType="com.sekai.system.model.Role">
+		select * from sys_role
+	 	order by role_code
+	</select>
+	<select id="getRolesByUserName" resultType="com.sekai.system.model.Role" parameterType="java.lang.String">
+		select r.* from sys_role r
+		left join sys_user_role ur ON r.role_id=ur.role_id
+		left join sys_user u on ur.user_id=u.user_id
+		where u.user_name=#{userName}#
+	</select>
+
+</mapper>

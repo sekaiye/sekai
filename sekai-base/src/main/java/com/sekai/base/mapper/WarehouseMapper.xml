@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sekai.base.mapper.WarehouseMapper">
+	<select id="addWarehouse" parameterType="com.sekai.base.model.Warehouse">
+		insert into base_warehouse(wh_code,wh_name,
+		is_ctrl_stock,forbid)
+		values(#{wh.whCode}, #{wh.whName},  
+		#{wh.isCtrlStock},#{wh.forbid})
+	</select>
+	<select id="deleteWarehouse" parameterType="java.lang.Integer">
+		delete from base_warehouse where wh_id=#{whId}
+	</select>
+	<select id="updateWarehouse" parameterType="com.sekai.base.model.Warehouse">
+		update base_warehouse set
+			wh_code=#{wh.whCode},wh_name=#{wh.whName},
+			is_ctrl_stock=#{wh.isCtrlStock},forbid=#{wh.forbid}
+		where wh_id=#{wh.whId}
+	</select>
+	<select id="getMaxId" resultType="java.lang.Integer">
+		select max(wh_id) from base_warehouse
+	</select>
+	<select id="getWarehouse" parameterType="java.lang.Integer" resultType="com.sekai.base.model.Warehouse">
+		select * from base_warehouse where wh_id=#{whId}
+	</select>
+	<select id="getWarehouseList" resultType="java.util.Map" parameterType="java.util.Map">
+		select wh_id AS whId,wh_code AS whCode,wh_name AS whName,
+		case when is_ctrl_stock=1 then '是' else '否' end isCtrlStockName,
+		case when forbid=1 then '是' else '否' end forbidName 
+		from base_warehouse t where 1=1 
+		<if test="keyword!=''">
+			and (wh_code like '%${keyword}%'
+			or wh_name like '%${keyword}%')
+		</if>
+	 	order by wh_code asc
+	</select>
+</mapper>

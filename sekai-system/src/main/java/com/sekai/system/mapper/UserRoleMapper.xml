@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org/DTD Mapper 3.0/" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sekai.system.mapper.UserRoleMapper">
+	<resultMap type="com.sekai.system.model.UserRole" id="userRoleMap">
+		<id column="ur_id" property="urId" />
+		<result column="user_id" property="userId" />
+		<result column="role_id" property="roleId" />
+	</resultMap>
+	<select id="addUserRole" parameterType="com.sekai.system.model.UserRole">
+		insert into sys_user_role(user_id,role_id)
+		values(#{userRole.userId}, #{userRole.roleId})
+	</select>
+	<select id="deleteUserRole" parameterType="java.lang.Integer">
+		delete from sys_user_role where ur_id=#{urId}
+	</select>
+	<select id="getMaxId" resultType="java.lang.Integer">
+		select max(ur_id) from sys_user_role
+	</select>
+	<select id="getUserRole" parameterType="java.lang.Integer" resultType="com.sekai.system.model.UserRole">
+		select * from sys_user_role where ur_id=#{urId}
+	</select>
+	<select id="getUserRoleList" resultType="java.util.Map" parameterType="java.util.Map">
+		select t.ur_id AS urId,u.user_name AS userName,u.nick_name AS nickName,
+		r.role_code AS roleCode,r.role_name AS roleName
+		from sys_user_role t
+		left join sys_user u on t.user_id=u.user_id
+		left join sys_role r on t.role_id=r.role_id
+		where 1=1
+		<if test="keyword!=''">
+			and (u.user_name like '%${keyword}%'
+			or u.nick_name like '%${keyword}%'
+			or r.role_code like '%${keyword}%'
+			or r.role_name like '%${keyword}%')
+		</if>
+	 	order by u.user_name,r.role_name
+	</select>
+	<select id="checkExist" resultType="java.lang.Integer">
+		select count(*) from sys_user_role where user_id=#{userId} and role_id=#{roleId}
+	</select>
+</mapper>
