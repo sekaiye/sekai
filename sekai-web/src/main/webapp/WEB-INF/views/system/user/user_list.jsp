@@ -229,7 +229,7 @@
     function selectThis(row){
     	//执行回调函数
     	<%if(request.getParameter("parentFrameId") != null){%>
-  		top.document.getElementById('${param.parentFrameId}').contentWindow.${param.callBackFun}(this);
+  		top.document.getElementById('${param.parentFrameId}').contentWindow.${param.callBackFun}(this,row);
   		<%}%>
     }
     $(function () {

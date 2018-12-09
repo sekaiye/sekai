@@ -66,7 +66,14 @@
 		var _userName=skGrid_Users.getFieldIndex("userName");
 		var _nickName=skGrid_Users.getFieldIndex("nickName");
 		var rowIndex_Users=null;
-		function doSelectUser(frm){
+		function doSelectUser(frm,row){
+            var table=frm.$('#data_table');
+            var obj=frm.getSelectOrDbClickRows(table,row);
+            if(obj==null || obj.length==0){
+                top.msgBox('请选择一行!');
+                return;
+            }
+            alert(obj)
 		   	var userId = frm.getSelectRows('data_table', 'userId');
 		   	var userName = frm.getSelectRows('data_table', 'userName');
 		   	var nickName = frm.getSelectRows('data_table', 'nickName');

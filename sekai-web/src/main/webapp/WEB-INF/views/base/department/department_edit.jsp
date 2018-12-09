@@ -67,14 +67,14 @@
 		indexSelectDepartment=top.showDialog('选择上级部门',url);
 	}
 	function doSelectDepartment(frm,row){
-		var table=frm.$('#data_table');
-		var obj=frm.getSelectOrDbClickRows(table,row);
-		if(obj==null || obj.length==0){
-			top.msgBox('请选择一行!');
-			return;
-		}
-		$("#parentId").val(obj.deptId);
-		$("#parentName").val(obj.deptName);
+        var sel=frm.$('#data_table').bootstrapTable('getSelections');
+        if(sel==null || sel.length==0){
+            top.msgBox('请选择一行!');
+            return;
+        }
+        var obj=sel[0];
+        $("#parentId").val(obj.deptId);
+        $("#parentName").val(obj.deptName);
 		top.closeDialog(indexSelectDepartment);
 	}
     </script>

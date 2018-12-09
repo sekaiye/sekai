@@ -58,7 +58,7 @@
     function initTable(){
     	var table_box = document.getElementById("table_box");
 	    var table_height = table_box.offsetHeight;
-        $('#data_table').bootstrapTable({
+        var skGrid=$('#data_table').bootstrapTable({
             method: 'get',
             //toolbar: '#toolbar',
             striped: true,
@@ -116,6 +116,7 @@
                 sortable:true
             }],
             onDblClickRow: function (row) {
+                checkBy('data_table','deptId',row.deptId);
             	if('${param.dlgSelect}'=='1'){
             		selectThis(row);
                 }else{

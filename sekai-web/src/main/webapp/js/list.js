@@ -16,13 +16,18 @@ function getSelectOrDbClickRows(table,row) {
 	var obj;
 	if(row==null){
 		var sel=table.bootstrapTable('getSelections');
+		return sel;
+		/*
 		if(sel.length==0)
 			return null;
-		obj=sel[0];
+		obj=sel[0];*/
 	}else{
 		obj = row;
 	}
 	return obj;
+}
+function checkBy(table,field,value) {
+    $('#'+table).bootstrapTable("checkBy", {field:field, values:[value]});
 }
 //导出Excel
 function exportToExcel(){

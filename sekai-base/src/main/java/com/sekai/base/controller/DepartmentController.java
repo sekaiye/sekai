@@ -26,13 +26,13 @@ import com.sekai.system.utils.Page;
 public class DepartmentController {
 	String exportId="export_department_list";
 	@Resource
-	DepartmentService DepartmentService;
+	DepartmentService departmentService;
     @RequestMapping("/base/department/delete")
     @ResponseBody
     public JsonResult delete(HttpServletRequest request, Integer[] ids){
     	for(Integer id : ids) {
     		try{
-    			DepartmentService.deleteDepartment(id);
+    			departmentService.deleteDepartment(id);
     		}catch(Exception e){
     			System.out.println("del:"+e.getMessage());
     			return new JsonResult(0, e.getMessage());
@@ -44,7 +44,7 @@ public class DepartmentController {
     }
     @RequestMapping("/base/department/edit")
     public String edit(HttpServletRequest request, Model model, Integer id){
-    	Department Department = DepartmentService.getDepartment(id);
+    	Department Department = departmentService.getDepartment(id);
     	model.addAttribute("department",Department);
 		return "/base/department/department_edit";
     }
@@ -63,9 +63,9 @@ public class DepartmentController {
     		department.setParentId(0);
     	}
     	if(department.getDeptId() == null){
-    		DepartmentService.addDepartment(department);
+    		departmentService.addDepartment(department);
     	}else{
-    		DepartmentService.updateDepartment(department);
+    		departmentService.updateDepartment(department);
     	}
     	model.addAttribute("action_result", "success");
     	return url;
@@ -95,7 +95,7 @@ public class DepartmentController {
 		Map<String,Object> mapPage = new HashMap<>();
 		mapPage.put("page", page);
 		mapPage.put("keyword", keyword);
-		List<Department> list = DepartmentService.getDepartmentList(mapPage);
+		List<Department> list = departmentService.getDepartmentList(mapPage);
 		Map<String,Object> mapExport = new HashMap<>();
 		mapExport.put("sql", page.getSql());
 		//设置要导出的列
