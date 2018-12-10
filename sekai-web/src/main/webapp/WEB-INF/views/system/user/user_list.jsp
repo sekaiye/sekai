@@ -128,8 +128,9 @@
                 sortable:true
             }],
             onDblClickRow: function (row) {
+                checkBy('data_table','userId',row.userId);
                 if('${param.dlgSelect}'=='1'){
-            		selectThis(row);
+            		selectThis();
                 }else{
                 	edit(row.userId);
                 }
@@ -226,10 +227,10 @@
     	top.showDialogSmall("导入",url);
     }
 
-    function selectThis(row){
+    function selectThis(){
     	//执行回调函数
     	<%if(request.getParameter("parentFrameId") != null){%>
-  		top.document.getElementById('${param.parentFrameId}').contentWindow.${param.callBackFun}(this,row);
+  		top.document.getElementById('${param.parentFrameId}').contentWindow.${param.callBackFun}(this);
   		<%}%>
     }
     $(function () {
@@ -250,7 +251,7 @@
         	elem: '#begindate'
 		});*/
 		$('#btn_dlg_select').click(function(){
-        	selectThis(null);
+        	selectThis();
         });
         $('#btn_search').click(function(){
         	searchTable();

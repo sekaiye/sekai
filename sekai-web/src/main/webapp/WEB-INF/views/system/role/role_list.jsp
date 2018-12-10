@@ -108,8 +108,9 @@
                 sortable:true
             }],
             onDblClickRow: function (row) {
+                checkBy('data_table','roleId',row.roleId);
                 if('${param.dlgSelect}'=='1'){
-            		selectThis(row);
+            		selectThis();
                 }else{
                 	edit(row.roleId);
                 }
@@ -188,7 +189,7 @@
     function selectThis(){
     	//执行回调函数
     	<%if(request.getParameter("parentFrameId") != null){%>
-  		top.document.getElementById('${param.parentFrameId}').contentWindow.${param.callBackFun}(this,row);
+  		top.document.getElementById('${param.parentFrameId}').contentWindow.${param.callBackFun}(this);
   		<%}%>
     }
     $(function () {

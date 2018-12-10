@@ -66,7 +66,7 @@
 		var url='base/department/list.do?dlgSelect=1&callBackFun=doSelectDepartment&parentFrameId='+thisFrameId;
 		indexSelectDepartment=top.showDialog('选择上级部门',url);
 	}
-	function doSelectDepartment(frm,row){
+	function doSelectDepartment(frm){
         var sel=frm.$('#data_table').bootstrapTable('getSelections');
         if(sel==null || sel.length==0){
             top.msgBox('请选择一行!');

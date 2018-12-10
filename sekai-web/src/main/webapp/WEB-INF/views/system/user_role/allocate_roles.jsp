@@ -66,31 +66,23 @@
 		var _userName=skGrid_Users.getFieldIndex("userName");
 		var _nickName=skGrid_Users.getFieldIndex("nickName");
 		var rowIndex_Users=null;
-		function doSelectUser(frm,row){
-            var table=frm.$('#data_table');
-            var obj=frm.getSelectOrDbClickRows(table,row);
-            if(obj==null || obj.length==0){
-                top.msgBox('请选择一行!');
+		function doSelectUser(frm){
+            var rows=frm.$('#data_table').bootstrapTable('getSelections');
+            if(rows==null || rows.length==0){
+                top.msgBox('请选择用户!');
                 return;
             }
-            alert(obj)
-		   	var userId = frm.getSelectRows('data_table', 'userId');
-		   	var userName = frm.getSelectRows('data_table', 'userName');
-		   	var nickName = frm.getSelectRows('data_table', 'nickName');
-			if(userId.length==0){
-				top.msgBox('请选择用户!');
-				return;
-			}
-			var table=skGrid_Users.getTable();
-			for(var i=0;i<userId.length;i++){
-				if(table.rows[rowIndex_Users+i]==null){
-					skGrid_Users.addRow(1);
-				}
-				var cells=table.rows[rowIndex_Users+i].cells;
-				cells[_userId].innerHTML=userId[i];
-				cells[_userName].innerHTML=userName[i];
-				cells[_nickName].innerHTML=nickName[i];
-			}
+            var table=skGrid_Users.getTable();
+            for(var i=0;i<rows.length;i++){
+                if(table.rows[rowIndex_Users+i]==null){
+                    skGrid_Users.addRow(1);
+                }
+                var row=rows[i];
+                var cells=table.rows[rowIndex_Users+i].cells;
+                cells[_userId].innerHTML=row.userId;
+                cells[_userName].innerHTML=row.userName;
+                cells[_nickName].innerHTML=row.nickName;
+            }
 			top.closeDialog(indexSelectUser);
 		}
 		var indexSelectRole;
@@ -103,24 +95,22 @@
 		var _roleName=skGrid_Roles.getFieldIndex("roleName");
 		var rowIndex_Roles=null;
 		function doSelectRole(frm){
-		   	var roleId = frm.getSelectRows('data_table', 'roleId');
-		   	var roleCode = frm.getSelectRows('data_table', 'roleCode');
-		   	var roleName = frm.getSelectRows('data_table', 'roleName');
-			if(roleId.length==0){
-				top.msgBox('请选择角色!');
-				return;
-			}
-			var table=skGrid_Roles.getTable();
-			
-			for(var i=0;i<roleId.length;i++){
-				if(table.rows[rowIndex_Roles+i]==null){
-					skGrid_Roles.addRow(1);
-				}
-				var cells=table.rows[rowIndex_Roles+i].cells;
-				cells[_roleId].innerHTML=roleId[i];
-				cells[_roleCode].innerHTML=roleCode[i];
-				cells[_roleName].innerHTML=roleName[i];
-			}
+            var rows=frm.$('#data_table').bootstrapTable('getSelections');
+            if(rows==null || rows.length==0){
+                top.msgBox('请选择角色!');
+                return;
+            }
+            var table=skGrid_Roles.getTable();
+            for(var i=0;i<rows.length;i++){
+                if(table.rows[rowIndex_Roles+i]==null){
+                    skGrid_Roles.addRow(1);
+                }
+                var row=rows[i];
+                var cells=table.rows[rowIndex_Roles+i].cells;
+                cells[_roleId].innerHTML=row.roleId;
+                cells[_roleCode].innerHTML=row.roleCode;
+                cells[_roleName].innerHTML=row.roleName;
+            }
 			top.closeDialog(indexSelectRole);
 		}
 		$('#btn_save').click(function(){
@@ -140,7 +130,7 @@
         		json_Users=json_Users.substring(0,json_Users.length-1);
         	}
         	json_Users='['+json_Users+']';
-        	
+
         	skGrid_Roles.cancelEdit();
         	var json_Roles='';
         	var table_Roles=skGrid_Roles.getTable();
@@ -157,18 +147,18 @@
         		json_Roles=json_Roles.substring(0,json_Roles.length-1);
         	}
         	json_Roles='['+json_Roles+']';
-        	$.ajax({  
+        	$.ajax({
 	        	type : "POST",
-	        	url : "save",  
-	            data : "json_Users="+json_Users+"&json_Roles="+json_Roles,  
-	            success : function(result) {  
+	        	url : "save",
+	            data : "json_Users="+json_Users+"&json_Roles="+json_Roles,
+	            success : function(result) {
 	            	if(result.success == 1){
 	        			top.msgBox('保存成功!');
 	        			top.refreshParentList("分配角色",true);
 	        		}else{
 	        			top.msgBox(result.data);
 	        		}
-	            }  
+	            }
 	        });
 		});
     </script>

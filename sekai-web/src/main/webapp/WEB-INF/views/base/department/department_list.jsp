@@ -39,7 +39,7 @@
 		</div>
 		<div class="form-inline" id="searchbar">
 			<button type="button" id="btn_dlg_select" class="btn btn-info" 
-				onclick="selectThis(null)">选择</button>
+				onclick="selectThis()">选择</button>
 			<div class="input-group">
 				<input type="text" class="form-control" style="width:auto" placeholder="关键字"  id="keyword" name="keyword">
 				<span class="input-group-btn" style='float:left'>
@@ -118,7 +118,7 @@
             onDblClickRow: function (row) {
                 checkBy('data_table','deptId',row.deptId);
             	if('${param.dlgSelect}'=='1'){
-            		selectThis(row);
+            		selectThis();
                 }else{
                 	edit(row.deptId);
                 }
@@ -209,7 +209,7 @@
 		}; 
 		return temp; 
 	}
-    function selectThis(row){
+    function selectThis(){
     	//执行回调函数
     	<%if(request.getParameter("parentFrameId") != null){%>
   		top.document.getElementById('${param.parentFrameId}').contentWindow.${param.callBackFun}(this,row);
