@@ -23,7 +23,7 @@
 		    var skGrid_Users=$("#div_sk_grid_users").SKGrid({
 		        columns:[
 		        	{field:"userId",title:"userId",css:"width:80px;display:none;"},
-		        	{field:"userName",title:"用户名",css:"width:150px;",editable:true,readonly:true},
+		        	{field:"userName",title:"用户名",css:"width:150px;",editable:true,readonly:false},
 		            {field:"nickName",title:"姓名",css:"width:150px;"}
 		        ],datas:json_Users,
 		        setButtonEvent: function (rowIndex, cellIndex, field) {
@@ -34,7 +34,9 @@
 		                
 		            }
 		            return btnEvt;
-		        }
+		        },onEnter: function(grid_tb_id, rowIndex, cellIndex, field,value){
+					selectUser();
+				}
 		    });
 		    skGrid_Users.addRow(5);
 
@@ -52,14 +54,17 @@
 		                btnEvt = "selectRole()";
 		            }
 		            return btnEvt;
-		        }
+		        },onEnter: function(grid_tb_id, rowIndex, cellIndex, field,value){
+					selectRole();
+				}
 		    });
 		    skGrid_Roles.addRow(5);
 		//});
 		var thisFrameId=top.getThisFrameId(this);
 		var indexSelectUser;
 		function selectUser(rowIndex){
-			var url='system/user/list.do?dlgSelect=1&callBackFun=doSelectUser&parentFrameId='+thisFrameId;
+			var keyword=skGrid_Users.getInputValue();
+			var url='system/user/list.do?dlgSelect=1&callBackFun=doSelectUser&parentFrameId='+thisFrameId+'&keyword='+keyword;
 			indexSelectUser=top.showDialog('选择用户',url);
 		}
 		var _userId=skGrid_Users.getFieldIndex("userId");
@@ -87,7 +92,8 @@
 		}
 		var indexSelectRole;
 		function selectRole(rowIndex){
-			var url='system/role/list.do?dlgSelect=1&callBackFun=doSelectRole&parentFrameId='+thisFrameId;
+			var keyword=skGrid_Roles.getInputValue();
+			var url='system/role/list.do?dlgSelect=1&callBackFun=doSelectRole&parentFrameId='+thisFrameId+'&keyword='+keyword;
 			indexSelectRole=top.showDialog('选择角色',url);
 		}
 		var _roleId=skGrid_Roles.getFieldIndex("roleId");

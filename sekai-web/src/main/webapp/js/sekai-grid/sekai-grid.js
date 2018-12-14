@@ -9,6 +9,8 @@
             return true;
         },computeRow: function (grid_tb_id, rowIndex, cellIndex){
             return true;
+        },onEnter: function (grid_tb_id, rowIndex, cellIndex, field,value) {
+            return true;
         }
     };
     $.fn.SKGrid = function(options){
@@ -23,16 +25,19 @@
         var sys_column_num = 1;//系统预置列
         this.getTable = function () {
             return document.getElementById(grid_tb_id);
-        }
+        };
+        this.getInputValue=function () {
+            return curInput.value;
+        };
         this.getColumn = function(){
             return column;
-        }
+        };
         this.setColumn = function(grid_column){
             column = grid_column;
-        }
+        };
         this.getEditRow = function () {
             return cur_edit_row;
-        }
+        };
         this.getFieldIndex = function (field) {
             for(var i in column){
                 if(column[i].field==field){
@@ -40,10 +45,10 @@
                 }
             }
             return sys_row_num;
-        }
+        };
         this.getSysColumnHtml = function(){
             return "<input type='checkbox' name='"+grid_tb_id+"_sk_chk' class='sk-chk'/>";
-        }
+        };
         this.bindData = function(grid_data){
             array_data = grid_data;
             var buttons = "<input type='button' class='sk_toolbar_btn' id='"+grid_tb_id+"_add_row' value='新增行'/>"
@@ -101,12 +106,12 @@
             pt += "</tbody>"
             pt += "</table>";
             table_html = "<div class='sk-grid-panel'>"+ pt+"</div>";
-        }
+        };
         
         this.setWidth = function (width) {
             var obj = document.getElementById(grid_tb_id);
             obj.style.width = width;
-        }
+        };
         //是否正在编辑
         var is_editing = false;
         this.Init = function () {
@@ -210,7 +215,7 @@
                     prevValue = document.getElementById(grid_tb_id+"_sk_input").value;
                 }
             }
-        }
+        };
         //取消编辑状态
         this.cancelEdit = function () {
             if (prevTd == null)
@@ -221,7 +226,7 @@
                 return;
             prevTd.innerHTML = prevTd.children[0].value;
             opts.computeRow(grid_tb_id,prevRow, prevColumn);//计算行
-        }
+        };
         this.moveCell = function (keyCode) {
             //如果jQuery UI Combogrid下拉查询已出现，禁止键盘方向键移动
             //if (jq_combogrid_show)
@@ -283,7 +288,7 @@
                 g.rows[curTr.rowIndex + 1].cells[cellIndex].click();
                 return;
             }
-        }
+        };
         this.insertRowCore = function (row) {
         	var insertTr = g.insertRow(row);
             for(var col=0;col<column.length+sys_column_num;col++){
@@ -295,7 +300,7 @@
                 		td.setAttribute('style',column[col-sys_column_num].css);
                 }
             }
-        }
+        };
         this.addRow = function (add_rows_num) {
             this.cancelEdit();
             if(g.rows[cur_click_row] != undefined)
@@ -303,7 +308,7 @@
             for (var ri = 0; ri < add_rows_num; ri++) {
             	this.insertRowCore(g.rows.length);
             }
-        }
+        };
         this.insertRow = function () {
             this.cancelEdit();
             if(cur_click_row==0)
@@ -312,12 +317,12 @@
                 return;
             g.rows[cur_click_row].bgColor = "#FFFFFF";
             this.insertRowCore(cur_click_row);
-        }
+        };
         this.copyRow = function () {
             //var new_row = g.rows[cur_click_row].cloneNode(true);
             //g.rows[cur_click_row].parentNode.appendChild(new_row);
             //g.rows[cur_click_row].parentNode.insertBefore(new_row, g.rows[cur_click_row].nextSibling);
-        }
+        };
         this.deleteRow = function () {
             var chk = document.getElementsByName(grid_tb_id+"_sk_chk");
             for (var i = chk.length-1; i >= 0; i--) {
@@ -327,7 +332,7 @@
                     //i = -1;
                 }
             }
-        }
+        };
         var is_select_all = false;
         this.selectAllRow = function(){
             var chk = document.getElementsByName(grid_tb_id+"_sk_chk");
@@ -335,7 +340,7 @@
             for (var i = 0; i < chk.length; i++) {
                 chk[i].checked = is_select_all;
             }
-        }
+        };
         //通过单元格得到所在列index，解决IE隐藏列后获取index不对的bug
         function getCellIndex(aCell) {
             var aRow = aCell.parentNode;
@@ -344,7 +349,7 @@
                     return i;
             }
             return false;
-        }
+        };
 
         this.createGrid = function(){
             //document.write(table_html);
@@ -352,14 +357,14 @@
             this.Init();
             $("#" + grid_tb_id).freezeHeader();
             //$("#" + grid_tb_id).colResizable();
-        }
+        };
         this.setTableWidth = function (tb_width) {
             var act_width = tb_width + 30;
             g.style.width = act_width + 'px';
-        }
+        };
         this.getTableHtml = function(){
             return table_html;
-        }
+        };
         this.setColumn(opts.columns);
         this.bindData(opts.datas);
         this.createGrid();
@@ -388,6 +393,19 @@
                     keyCode = window.event.keyCode;
                 }
                 that.moveCell(keyCode);
+            });
+            _this.find('#'+grid_tb_id).keydown(function(evt){
+                var keyCode;
+                try{
+                    keyCode = evt.keyCode;
+                }catch(e){
+                    keyCode = window.event.keyCode;
+                }
+                if(keyCode=='13'){
+                    var cellIndex = getCellIndex(curTd);
+                    var value=curInput.value;
+                    opts.onEnter(grid_tb_id,curTr.rowIndex, cellIndex,column[cellIndex - sys_column_num].field,value);
+                }
             });
         });
 

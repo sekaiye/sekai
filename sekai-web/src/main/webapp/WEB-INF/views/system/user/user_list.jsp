@@ -239,10 +239,15 @@
     	}else{
     		$('#btn_dlg_select').css('display','none');
     	}
+    	var keyword='${param.keyword}';
+		if(keyword!=''){
+			$('#keyword').val(keyword);
+		}
+		$('#keyword').focus();
         initTable();
         $('#keyword').keydown(function(e){
         	//搜索回车事件
-        	if(e.keyCode==13){
+        	if(e.keyCode=='13'){
         		searchTable();
         	}
 		});

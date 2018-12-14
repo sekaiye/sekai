@@ -198,6 +198,11 @@
     	}else{
     		$('#btn_dlg_select').css('display','none');
     	}
+		var keyword='${param.keyword}';
+		if(keyword!=''){
+			$('#keyword').val(keyword);
+		}
+		$('#keyword').focus();
         initTable();
       	//隐藏列
         $('#data_table').bootstrapTable('hideColumn', 'roleId');
