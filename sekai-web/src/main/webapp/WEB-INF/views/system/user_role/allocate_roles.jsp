@@ -26,14 +26,13 @@
 		        	{field:"userName",title:"用户名",css:"width:150px;",editable:true,readonly:false},
 		            {field:"nickName",title:"姓名",css:"width:150px;"}
 		        ],datas:json_Users,
-		        setButtonEvent: function (rowIndex, cellIndex, field) {
+		        onButtonClick: function (rowIndex, cellIndex, field) {
 		            var btnEvt = "";
 		            if (field == 'userName') {
 		            	rowIndex_Users=rowIndex;
-		                btnEvt = "selectUser()";
+		                selectUser();
 		                
 		            }
-		            return btnEvt;
 		        },onEnter: function(grid_tb_id, rowIndex, cellIndex, field,value){
 					selectUser();
 				}
@@ -47,7 +46,7 @@
 		        	{field:"roleCode",title:"角色编码",css:"width:150px;",editable:true},
 		        	{field:"roleName",title:"角色",css:"width:150px;"}
 		        ],datas:json_Roles,
-		        setButtonEvent: function (rowIndex, cellIndex, field) {
+		        onButtonClick: function (rowIndex, cellIndex, field) {
 		            var btnEvt = "";
 		            if (field == 'roleCode') {
 		            	rowIndex_Roles=rowIndex;

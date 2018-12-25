@@ -58,12 +58,11 @@
 		            {field:"tax",title:"税金", css:"width:150px",editable:false},
 		            {field:"remark",title:"备注", css:"width:150px",editable:true}
 		        ],datas:json,
-		        setButtonEvent: function (rowIndex, cellIndex, field) {
+		        onButtonClick: function (rowIndex, cellIndex, field) {
 		            var btnEvt = "";
 		            if (field == 'matCode') {
-		                btnEvt = "alert('这是可以弹窗选择')";
+		                alert('onButtonClick');
 		            }
-		            return btnEvt;
 		        },setEditable: function (grid_tb_id, rowIndex, cellIndex, field){
 		            /*
 		            var cells = skGrid.getTable().rows[rowIndex].cells;
@@ -73,7 +72,7 @@
 		                }
 		            }*/
 		            return true;
-		        },computeRow: function (grid_tb_id, rowIndex, cellIndex){
+		        },onDataChanged: function (grid_tb_id, rowIndex, cellIndex){
 		            var cells = skGrid.getTable().rows[rowIndex].cells;
 		            if (cellIndex == _price || cellIndex == _qty){
 

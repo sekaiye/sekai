@@ -3,11 +3,11 @@
         //grid_tb_id:"sk_grid",
         columns:[],
         datas:[],
-        setButtonEvent: function (rowIndex, cellIndex, field) {
+        onButtonClick: function (rowIndex, cellIndex, field) {
             return "";
         },setEditable: function (grid_tb_id, rowIndex, cellIndex, field){
             return true;
-        },computeRow: function (grid_tb_id, rowIndex, cellIndex){
+        },onDataChanged: function (grid_tb_id, rowIndex, cellIndex){
             return true;
         },onEnter: function (grid_tb_id, rowIndex, cellIndex, field,value) {
             return true;
@@ -156,7 +156,7 @@
                             //只有改变了值才计算
                             if (prevValue != prevTd.innerHTML) {
                                 //行计算
-                                opts.computeRow(grid_tb_id,prevRow, prevColumn);
+                                opts.onDataChanged(grid_tb_id,prevRow, prevColumn);
                             }
                         }
                         is_editing = false;
@@ -179,22 +179,27 @@
                     	datefield="onmousedown=\"laydate.render({elem: '#"+grid_tb_id+"_sk_input'});\"";
                     }
                     var field=column[cellIndex-sys_column_num].field;
-                    var buttonEvent = opts.setButtonEvent(curTr.rowIndex, cellIndex, field);
+                    /*
+                    var buttonEvent = opts.onButtonClick(curTr.rowIndex, cellIndex, field);
                     if (buttonEvent != "" && bEditable) {
                         inputWidth = "70%";
-                    }
+                    }*/
                     var curTd_html = "<input type='text' id='"+grid_tb_id+"_sk_input' class='sk-input' style='width:" + inputWidth
                                     + ";height:30px;float:left;' value='" + curTd.innerHTML + "'"+inputReadonly+datefield+"/>";
                     /*
                     curTd_html = "<select id='"+grid_tb_id+"_sk_input' class='sk-input' style='width:" + inputWidth
                     + ";height:30px;float:left;'><option value=''></option><option value='1'>是</option><option value='0'>否</option></select>";
                     */
-                    if (buttonEvent != "" && bEditable) {
-                        curTd_html += "<span class='sk_select' onclick=\""+buttonEvent+"\"/>";
+                    if (/*buttonEvent != "" && */bEditable) {
+                        curTd_html += "<span class='sk_select' id='"+grid_tb_id+"_sk_input_btn'/>";
                     }
                     curTd.innerHTML = curTd_html;
                     cur_edit_row = curTr.rowIndex;
                     cur_edit_col = cellIndex;
+                    $("#"+grid_tb_id+"_sk_input_btn").click(function(evt){
+                        var cellIndex = getCellIndex(curTd);
+                        opts.onButtonClick(curTr.rowIndex,cellIndex,column[cellIndex - sys_column_num].field);
+                    });
                 }
                 if (curTd.children[0] != null) {
                     curInput = curTd.children[0];
@@ -225,7 +230,7 @@
             if (prevTd.children[0] == undefined)
                 return;
             prevTd.innerHTML = prevTd.children[0].value;
-            opts.computeRow(grid_tb_id,prevRow, prevColumn);//计算行
+            opts.onDataChanged(grid_tb_id,prevRow, prevColumn);//计算行
         };
         this.moveCell = function (keyCode) {
             //如果jQuery UI Combogrid下拉查询已出现，禁止键盘方向键移动
