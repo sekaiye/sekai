@@ -1,4 +1,4 @@
-if object_id('sk_system_role') is null
+if object_id('sys_role') is null
 begin
   CREATE TABLE sys_role (
     role_id INT identity(1,1),
