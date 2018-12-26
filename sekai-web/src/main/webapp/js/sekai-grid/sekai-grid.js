@@ -169,7 +169,8 @@
                 var inputWidth = "100%";
                 if (cellIndex >= 0 && column[cellIndex - sys_column_num].editable == true) {
                     var inputReadonly="";
-                    var readonly=column[cellIndex - sys_column_num].readonly
+                    var readonly=column[cellIndex - sys_column_num].readonly;
+                    var iconbtn=column[cellIndex - sys_column_num].iconbtn;
                     var bEditable=opts.setEditable(grid_tb_id,curTr.rowIndex, cellIndex,column[cellIndex - sys_column_num].field)
                     if (!bEditable || readonly){
                     	inputReadonly=" readonly='readonly'";
@@ -178,19 +179,17 @@
                     if(column[cellIndex - sys_column_num].datefield==true){
                     	datefield="onmousedown=\"laydate.render({elem: '#"+grid_tb_id+"_sk_input'});\"";
                     }
-                    var field=column[cellIndex-sys_column_num].field;
-                    /*
-                    var buttonEvent = opts.onButtonClick(curTr.rowIndex, cellIndex, field);
-                    if (buttonEvent != "" && bEditable) {
+                    //var field=column[cellIndex-sys_column_num].field;
+                    if (iconbtn && bEditable) {
                         inputWidth = "70%";
-                    }*/
+                    }
                     var curTd_html = "<input type='text' id='"+grid_tb_id+"_sk_input' class='sk-input' style='width:" + inputWidth
                                     + ";height:30px;float:left;' value='" + curTd.innerHTML + "'"+inputReadonly+datefield+"/>";
                     /*
                     curTd_html = "<select id='"+grid_tb_id+"_sk_input' class='sk-input' style='width:" + inputWidth
                     + ";height:30px;float:left;'><option value=''></option><option value='1'>是</option><option value='0'>否</option></select>";
                     */
-                    if (/*buttonEvent != "" && */bEditable) {
+                    if (iconbtn && bEditable) {
                         curTd_html += "<span class='sk_select' id='"+grid_tb_id+"_sk_input_btn'/>";
                     }
                     curTd.innerHTML = curTd_html;

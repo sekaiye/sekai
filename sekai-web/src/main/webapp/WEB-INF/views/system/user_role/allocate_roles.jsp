@@ -23,11 +23,10 @@
 		    var skGrid_Users=$("#div_sk_grid_users").SKGrid({
 		        columns:[
 		        	{field:"userId",title:"userId",css:"width:80px;display:none;"},
-		        	{field:"userName",title:"用户名",css:"width:150px;",editable:true,readonly:false},
+		        	{field:"userName",title:"用户名",css:"width:150px;",editable:true,iconbtn:true,readonly:false},
 		            {field:"nickName",title:"姓名",css:"width:150px;"}
 		        ],datas:json_Users,
 		        onButtonClick: function (rowIndex, cellIndex, field) {
-		            var btnEvt = "";
 		            if (field == 'userName') {
 		            	rowIndex_Users=rowIndex;
 		                selectUser();
@@ -43,16 +42,14 @@
 		    var skGrid_Roles=$("#div_sk_grid_roles").SKGrid({
 		        columns:[
 		        	{field:"roleId",title:"roleId",css:"width:80px;display:none;"},
-		        	{field:"roleCode",title:"角色编码",css:"width:150px;",editable:true},
+		        	{field:"roleCode",title:"角色编码",css:"width:150px;",editable:true,iconbtn:true},
 		        	{field:"roleName",title:"角色",css:"width:150px;"}
 		        ],datas:json_Roles,
 		        onButtonClick: function (rowIndex, cellIndex, field) {
-		            var btnEvt = "";
 		            if (field == 'roleCode') {
 		            	rowIndex_Roles=rowIndex;
-		                btnEvt = "selectRole()";
+		                selectRole();
 		            }
-		            return btnEvt;
 		        },onEnter: function(grid_tb_id, rowIndex, cellIndex, field,value){
 					selectRole();
 				}
