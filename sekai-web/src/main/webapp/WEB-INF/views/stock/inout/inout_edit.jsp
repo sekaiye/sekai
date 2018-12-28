@@ -56,6 +56,11 @@
 		            {field:"amount",title:"金额", css:"width:150px",editable:true},
 		            {field:"taxamount",title:"含税金额", css:"width:150px",editable:false},
 		            {field:"tax",title:"税金", css:"width:150px",editable:false},
+					{field:"yesNo",title:"是否", css:"width:80px",editable:true,
+						combo:[{text:"是",value:"1"},{text:"否",value:"0"}],
+						comboValueField:"yesNoValue"
+					},
+					{field:"yesNoValue",title:"是否值", css:"width:60px",editable:false},
 		            {field:"remark",title:"备注", css:"width:150px",editable:true}
 		        ],datas:json,
 		        onButtonClick: function (rowIndex, cellIndex, field) {
@@ -129,9 +134,9 @@
 		            }  
 		        });
 	        });
-	        
+			skGrid.addRow(5);
 	     });
- 
+
     </script>
 </body>
 </html>

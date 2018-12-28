@@ -152,7 +152,13 @@
                     && prevRow != null && prevColumn != null) {
                     if (prevRow != curTr.rowIndex || prevColumn != cellIndex) {
                         if (prevTd.children[0] != null) {
-                            prevTd.innerHTML = prevTd.children[0].value;
+                            //alert(td_html)
+                            var combo=column[cellIndex - sys_column_num].combo;
+                            if(combo!=undefined) {
+                                prevTd.innerHTML = $("#" + grid_tb_id + "_sk_input").find("option:selected").text();
+                            }else{
+                                prevTd.innerHTML = prevTd.children[0].value;
+                            }
                             //只有改变了值才计算
                             if (prevValue != prevTd.innerHTML) {
                                 //行计算
@@ -181,24 +187,40 @@
                     }
                     //var field=column[cellIndex-sys_column_num].field;
                     if (iconbtn && bEditable) {
-                        inputWidth = "70%";
+                        var tdWidth=curTd.offsetWidth;
+                        inputWidth = (tdWidth-20)+'px';
                     }
                     var curTd_html = "<input type='text' id='"+grid_tb_id+"_sk_input' class='sk-input' style='width:" + inputWidth
                                     + ";height:30px;float:left;' value='" + curTd.innerHTML + "'"+inputReadonly+datefield+"/>";
-                    /*
-                    curTd_html = "<select id='"+grid_tb_id+"_sk_input' class='sk-input' style='width:" + inputWidth
-                    + ";height:30px;float:left;'><option value=''></option><option value='1'>是</option><option value='0'>否</option></select>";
-                    */
+
                     if (iconbtn && bEditable) {
                         curTd_html += "<span class='sk_select' id='"+grid_tb_id+"_sk_input_btn'/>";
+                    }
+                    var combo=column[cellIndex - sys_column_num].combo;
+                    if(combo!=null){
+                        curTd_html = "<select id='"+grid_tb_id+"_sk_input' class='sk-input' style='width:" + inputWidth
+                            + ";height:30px;float:left;'>";
+                        curTd_html += "<option value=''></option>";
+                        for(var i in combo){
+                            curTd_html += "<option value='"+combo[i].value+"'>"+combo[i].text+"</option>";
+                        }
+                        curTd_html += "</select>";
                     }
                     curTd.innerHTML = curTd_html;
                     cur_edit_row = curTr.rowIndex;
                     cur_edit_col = cellIndex;
-                    $("#"+grid_tb_id+"_sk_input_btn").click(function(evt){
-                        var cellIndex = getCellIndex(curTd);
-                        opts.onButtonClick(curTr.rowIndex,cellIndex,column[cellIndex - sys_column_num].field);
-                    });
+                    var cellIndex = getCellIndex(curTd);
+                    if (iconbtn){
+                        $("#"+grid_tb_id+"_sk_input_btn").click(function(){
+
+                            opts.onButtonClick(curTr.rowIndex,cellIndex,column[cellIndex - sys_column_num].field);
+                        });
+                    }
+                    if (combo!=null){
+                        $("#"+grid_tb_id+"_sk_input").change(function(){
+                            g.rows[cur_edit_row].cells[cellIndex+1].innerHTML="123";
+                        });
+                    }
                 }
                 if (curTd.children[0] != null) {
                     curInput = curTd.children[0];
@@ -253,7 +275,7 @@
                     return;
                 g.rows[curTr.rowIndex].cells[cellIndex + 1].click();
                 var curTd_html = curTd.outerHTML.toUpperCase();
-                if (curTd_html.indexOf("<INPUT") == -1 || curTd_html.indexOf("DISPLAY") > -1
+                if ((curTd_html.indexOf("<INPUT") == -1 && curTd_html.indexOf("<SELECT") == -1) || curTd_html.indexOf("DISPLAY") > -1
                 		|| curTd_html.indexOf("LAYDATE.RENDER") > -1) {
                     this.moveCell(keyCode);
                 }
@@ -272,7 +294,7 @@
                     return;
                 g.rows[curTr.rowIndex].cells[cellIndex - 1].click();
                 var curTd_html = curTd.outerHTML.toUpperCase();
-                if (curTd_html.indexOf("<INPUT") == -1 || curTd_html.indexOf("DISPLAY") > -1
+                if ((curTd_html.indexOf("<INPUT") == -1 && curTd_html.indexOf("<SELECT") == -1) || curTd_html.indexOf("DISPLAY") > -1
                 		|| curTd_html.indexOf("LAYDATE.RENDER") > -1) {
                     this.moveCell(keyCode);
                 }
