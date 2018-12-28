@@ -154,7 +154,7 @@
                         if (prevTd.children[0] != null) {
                             //alert(td_html)
                             var combo=column[cellIndex - sys_column_num].combo;
-                            if(combo!=undefined) {
+                            if(combo!=null && combo!=undefined) {
                                 prevTd.innerHTML = $("#" + grid_tb_id + "_sk_input").find("option:selected").text();
                             }else{
                                 prevTd.innerHTML = prevTd.children[0].value;
