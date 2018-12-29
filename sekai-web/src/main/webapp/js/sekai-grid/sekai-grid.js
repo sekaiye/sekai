@@ -132,12 +132,14 @@
 
 
                 var td_html = thisTd.outerHTML.toUpperCase();
+
                 if (td_html.indexOf("<INPUT") > -1
                     || td_html.indexOf("<IMG") > -1
                     || td_html.indexOf("<SPAN") > -1
                     || td_html.indexOf("<SELECT") > -1
                     || thisTd.nodeName.toUpperCase() == "INPUT")
                     return;
+
                 if (thisTd.cellIndex == 0 || thisTd.parentElement.rowIndex == 0)
                     return;
                 try{
@@ -152,18 +154,7 @@
                     && prevRow != null && prevColumn != null) {
                     if (prevRow != curTr.rowIndex || prevColumn != cellIndex) {
                         if (prevTd.children[0] != null) {
-                            //alert(td_html)
-                            var combo=column[cellIndex - sys_column_num].combo;
-                            if(combo!=null && combo!=undefined) {
-                                prevTd.innerHTML = $("#" + grid_tb_id + "_sk_input").find("option:selected").text();
-                            }else{
-                                prevTd.innerHTML = prevTd.children[0].value;
-                            }
-                            //只有改变了值才计算
-                            if (prevValue != prevTd.innerHTML) {
-                                //行计算
-                                opts.onDataChanged(grid_tb_id,prevRow, prevColumn);
-                            }
+                            doCancelEdit();
                         }
                         is_editing = false;
                     }
@@ -216,11 +207,12 @@
                             opts.onButtonClick(curTr.rowIndex,cellIndex,column[cellIndex - sys_column_num].field);
                         });
                     }
+                    /*
                     if (combo!=null){
                         $("#"+grid_tb_id+"_sk_input").change(function(){
-                            g.rows[cur_edit_row].cells[cellIndex+1].innerHTML="123";
+                            g.rows[cur_edit_row].cells[cellIndex+1].innerHTML="456";
                         });
-                    }
+                    }*/
                 }
                 if (curTd.children[0] != null) {
                     curInput = curTd.children[0];
@@ -244,15 +236,29 @@
         };
         //取消编辑状态
         this.cancelEdit = function () {
+            doCancelEdit();
+        };
+        function doCancelEdit(){
             if (prevTd == null)
                 return;
             if (prevTd.children == undefined)
                 return;
             if (prevTd.children[0] == undefined)
                 return;
-            prevTd.innerHTML = prevTd.children[0].value;
-            opts.onDataChanged(grid_tb_id,prevRow, prevColumn);//计算行
-        };
+            var combo=column[prevColumn - sys_column_num].combo;
+            if(combo!=null && combo!=undefined) {
+                var text=$("#" + grid_tb_id + "_sk_input").find("option:selected").text();
+                g.rows[prevRow].cells[prevColumn+1].innerHTML=prevTd.children[0].value;
+                prevTd.innerHTML = text;
+            }else{
+                prevTd.innerHTML = prevTd.children[0].value;
+            }
+            //只有改变了值才计算
+            if (prevValue != prevTd.innerHTML) {
+                //行计算
+                opts.onDataChanged(grid_tb_id,prevRow, prevColumn);
+            }
+        }
         this.moveCell = function (keyCode) {
             //如果jQuery UI Combogrid下拉查询已出现，禁止键盘方向键移动
             //if (jq_combogrid_show)
@@ -294,7 +300,7 @@
                     return;
                 g.rows[curTr.rowIndex].cells[cellIndex - 1].click();
                 var curTd_html = curTd.outerHTML.toUpperCase();
-                if ((curTd_html.indexOf("<INPUT") == -1 && curTd_html.indexOf("<SELECT") == -1) || curTd_html.indexOf("DISPLAY") > -1
+                    if ((curTd_html.indexOf("<INPUT") == -1 && curTd_html.indexOf("<SELECT") == -1) || curTd_html.indexOf("DISPLAY") > -1
                 		|| curTd_html.indexOf("LAYDATE.RENDER") > -1) {
                     this.moveCell(keyCode);
                 }

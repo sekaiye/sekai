@@ -97,7 +97,7 @@
 	        laydate.render({elem: '#billDate'})
  
 	        $('#btn_save').click(function(){
-	        	skGrid.cancelEdit();
+	        	skGrid.cancelEdit();return;
 	        	var json='[';
 	        	var table=skGrid.getTable();
 	        	for (var row=1;row<table.rows.length;row++){
