@@ -117,6 +117,7 @@
         this.Init = function () {
             g = document.getElementById(grid_tb_id);
             g.style.width = g.offsetWidth + "px";
+            this.addRow(opts.defaultRow);
             g.onclick = function (evt) {
                 if(cur_click_row != undefined)
                     g.rows[cur_click_row].bgColor = "#FFFFFF";

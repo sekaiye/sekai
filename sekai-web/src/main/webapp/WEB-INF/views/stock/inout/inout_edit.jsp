@@ -46,7 +46,7 @@
 		        columns:[
 		        	{field:"ids",title:"ids",css:"width:80;display:none;"},
 		        	{field:"matId",title:"matId",css:"width:80;display:none;"},
-		            {field:"matCode",title:"物料",editable:true,css:"width:140px;color:blue;"},
+		            {field:"matCode",title:"物料",editable:true,iconbtn:true,css:"width:140px;color:blue;"},
 		            {field:"matName",title:"物料名称",css:"width:120px"},
 		            {field:"spec",title:"规格型号",css:"width:140px"},
 		            {field:"unit",title:"单位",css:"width:60px"},
@@ -57,16 +57,14 @@
 		            {field:"taxamount",title:"含税金额", css:"width:150px",editable:false},
 		            {field:"tax",title:"税金", css:"width:150px",editable:false},
 					{field:"yesNo",title:"是否", css:"width:80px",editable:true,
-						combo:[{text:"是",value:"1"},{text:"否",value:"0"}],
-						comboValueField:"yesNoValue"
+						combo:[{text:"是",value:"1"},{text:"否",value:"0"}]
 					},
 					{field:"yesNoValue",title:"是否值", css:"width:60px",editable:false},
 		            {field:"remark",title:"备注", css:"width:150px",editable:true}
-		        ],datas:json,
+		        ],datas:json,defaultRow:3,
 		        onButtonClick: function (rowIndex, cellIndex, field) {
-		            var btnEvt = "";
 		            if (field == 'matCode') {
-		                alert('onButtonClick');
+		                alert(rowIndex);
 		            }
 		        },setEditable: function (grid_tb_id, rowIndex, cellIndex, field){
 		            /*
@@ -134,7 +132,6 @@
 		            }  
 		        });
 	        });
-			skGrid.addRow(5);
 	     });
 
     </script>

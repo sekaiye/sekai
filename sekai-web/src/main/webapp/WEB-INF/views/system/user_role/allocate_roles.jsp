@@ -25,7 +25,7 @@
 		        	{field:"userId",title:"userId",css:"width:80px;display:none;"},
 		        	{field:"userName",title:"用户名",css:"width:150px;",editable:true,iconbtn:true,readonly:false},
 		            {field:"nickName",title:"姓名",css:"width:150px;"}
-		        ],datas:json_Users,
+		        ],datas:json_Users,defaultRow:3,
 		        onButtonClick: function (rowIndex, cellIndex, field) {
 		            if (field == 'userName') {
 		            	rowIndex_Users=rowIndex;
@@ -33,10 +33,10 @@
 		                
 		            }
 		        },onEnter: function(grid_tb_id, rowIndex, cellIndex, field,value){
+					rowIndex_Users=rowIndex;
 					selectUser();
 				}
 		    });
-		    skGrid_Users.addRow(5);
 
 			var json_Roles=[];
 		    var skGrid_Roles=$("#div_sk_grid_roles").SKGrid({
@@ -44,17 +44,17 @@
 		        	{field:"roleId",title:"roleId",css:"width:80px;display:none;"},
 		        	{field:"roleCode",title:"角色编码",css:"width:150px;",editable:true,iconbtn:true},
 		        	{field:"roleName",title:"角色",css:"width:150px;"}
-		        ],datas:json_Roles,
+		        ],datas:json_Roles,defaultRow:3,
 		        onButtonClick: function (rowIndex, cellIndex, field) {
 		            if (field == 'roleCode') {
 		            	rowIndex_Roles=rowIndex;
 		                selectRole();
 		            }
 		        },onEnter: function(grid_tb_id, rowIndex, cellIndex, field,value){
+					rowIndex_Roles=rowIndex;
 					selectRole();
 				}
 		    });
-		    skGrid_Roles.addRow(5);
 		//});
 		var thisFrameId=top.getThisFrameId(this);
 		var indexSelectUser;
