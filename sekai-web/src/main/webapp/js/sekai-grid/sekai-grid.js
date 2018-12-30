@@ -188,20 +188,28 @@
                     if (iconbtn && bEditable) {
                         curTd_html += "<span class='sk_select' id='"+grid_tb_id+"_sk_input_btn'/>";
                     }
+                    cur_edit_row = curTr.rowIndex;
+                    cur_edit_col = cellIndex;
+                    var cellIndex = getCellIndex(curTd);
                     var combo=column[cellIndex - sys_column_num].combo;
                     if(combo!=null){
                         curTd_html = "<select id='"+grid_tb_id+"_sk_input' class='sk-input' style='width:" + inputWidth
                             + ";height:30px;float:left;'>";
                         curTd_html += "<option value=''></option>";
+
                         for(var i in combo){
-                            curTd_html += "<option value='"+combo[i].value+"'>"+combo[i].text+"</option>";
+                            var selectValue=g.rows[cur_edit_row].cells[cellIndex+1].innerHTML;
+                            var optionSelected="";
+                            if(combo[i].value==selectValue)
+                                optionSelected=" selected";
+                            curTd_html += "<option value='"+combo[i].value+"'"+optionSelected+">"+combo[i].text+"</option>";
                         }
+
                         curTd_html += "</select>";
+
                     }
                     curTd.innerHTML = curTd_html;
-                    cur_edit_row = curTr.rowIndex;
-                    cur_edit_col = cellIndex;
-                    var cellIndex = getCellIndex(curTd);
+
                     if (iconbtn){
                         $("#"+grid_tb_id+"_sk_input_btn").click(function(){
 
@@ -397,6 +405,9 @@
         };
         this.getTableHtml = function(){
             return table_html;
+        };
+        this.getCurRow = function(){
+            return curTr.rowIndex;
         };
         this.setColumn(opts.columns);
         this.bindData(opts.datas);
