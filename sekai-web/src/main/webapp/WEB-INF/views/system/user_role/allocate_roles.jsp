@@ -28,12 +28,10 @@
 		        ],datas:json_Users,defaultRow:3,
 		        onButtonClick: function (rowIndex, cellIndex, field) {
 		            if (field == 'userName') {
-		            	rowIndex_Users=rowIndex;
 		                selectUser();
 		                
 		            }
 		        },onEnter: function(grid_tb_id, rowIndex, cellIndex, field,value){
-					rowIndex_Users=rowIndex;
 					selectUser();
 				}
 		    });
@@ -47,11 +45,9 @@
 		        ],datas:json_Roles,defaultRow:3,
 		        onButtonClick: function (rowIndex, cellIndex, field) {
 		            if (field == 'roleCode') {
-		            	rowIndex_Roles=rowIndex;
 		                selectRole();
 		            }
 		        },onEnter: function(grid_tb_id, rowIndex, cellIndex, field,value){
-					rowIndex_Roles=rowIndex;
 					selectRole();
 				}
 		    });
@@ -66,7 +62,6 @@
 		var _userId=skGrid_Users.getFieldIndex("userId");
 		var _userName=skGrid_Users.getFieldIndex("userName");
 		var _nickName=skGrid_Users.getFieldIndex("nickName");
-		var rowIndex_Users=null;
 		function doSelectUser(frm){
             var rows=frm.$('#data_table').bootstrapTable('getSelections');
             if(rows==null || rows.length==0){
@@ -75,11 +70,11 @@
             }
             var table=skGrid_Users.getTable();
             for(var i=0;i<rows.length;i++){
-                if(table.rows[rowIndex_Users+i]==null){
+                if(table.rows[skGrid_Users.getCurRow()+i]==null){
                     skGrid_Users.addRow(1);
                 }
                 var row=rows[i];
-                var cells=table.rows[rowIndex_Users+i].cells;
+                var cells=table.rows[skGrid_Users.getCurRow()+i].cells;
                 cells[_userId].innerHTML=row.userId;
                 cells[_userName].innerHTML=row.userName;
                 cells[_nickName].innerHTML=row.nickName;
@@ -95,7 +90,6 @@
 		var _roleId=skGrid_Roles.getFieldIndex("roleId");
 		var _roleCode=skGrid_Roles.getFieldIndex("roleCode");
 		var _roleName=skGrid_Roles.getFieldIndex("roleName");
-		var rowIndex_Roles=null;
 		function doSelectRole(frm){
             var rows=frm.$('#data_table').bootstrapTable('getSelections');
             if(rows==null || rows.length==0){
@@ -104,11 +98,11 @@
             }
             var table=skGrid_Roles.getTable();
             for(var i=0;i<rows.length;i++){
-                if(table.rows[rowIndex_Roles+i]==null){
+                if(table.rows[skGrid_Roles.getCurRow()+i]==null){
                     skGrid_Roles.addRow(1);
                 }
                 var row=rows[i];
-                var cells=table.rows[rowIndex_Roles+i].cells;
+                var cells=table.rows[skGrid_Roles.getCurRow()+i].cells;
                 cells[_roleId].innerHTML=row.roleId;
                 cells[_roleCode].innerHTML=row.roleCode;
                 cells[_roleName].innerHTML=row.roleName;
