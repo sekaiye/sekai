@@ -48,7 +48,7 @@ public class ShiroRealm extends AuthorizingRealm{
         }else {
         	roles = roleService.getRolesByUserName(userName);
         }
-        
+
     	Set<String> set = new HashSet<String>();
     	for(Role role : roles) {
     		set.add(role.getRoleCode());
