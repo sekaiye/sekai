@@ -13,9 +13,6 @@
         <module>sekai-base</module>
         <module>sekai-stock</module>
         <module>sekai-web</module>
-        <module>sekai-web</module>
-        <module>sekai-base</module>
-        <module>sekai-stock</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

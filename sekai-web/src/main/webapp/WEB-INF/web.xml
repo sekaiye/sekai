@@ -43,6 +43,7 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
   <!-- shiro配置 结束 -->
+
   <!-- 配置SpringMVC核心控制器 -->
   <servlet>
     <servlet-name>springMVC</servlet-name>

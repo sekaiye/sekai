@@ -9,17 +9,38 @@
 
     <!-- 使用spring组件扫描@service  -->
     <context:component-scan base-package="com.sekai.system.service"/>
+    <!--shiro-redis redisCacheManager-->
+    <bean id="redisCacheManager" class="org.crazycake.shiro.RedisCacheManager">
+        <property name="keyPrefix" value="shiro_redis_session:"/>
+        <property name="redisManager" ref="redisClient"/>
+    </bean>
     <!-- 自定义域realm -->
-    <bean id="shiroRealm" class="com.sekai.system.utils.ShiroRealm"></bean>
+    <bean id="shiroRealm" class="com.sekai.system.utils.ShiroRealm">
+        <property name="cacheManager" ref="redisCacheManager"/>
+    </bean>
+    <!--redisSessionDAO-->
+    <bean id="redisSessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO"></bean>
+    <!--simpleCookie,不定义在集群环境下会出现There is no session with id ....-->
+    <bean id="simpleCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg name="name" value="custom.session"/>
+        <property name="path" value="/"/>
+    </bean>
+    <!--sessionManager-->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionDAO" ref="redisSessionDAO"/>
+        <property name="sessionIdCookie" ref="simpleCookie"/>
+    </bean>
     <!-- 安全管理器  ref对象-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
     	<!--认证管理器-->
         <property name="realm" ref="shiroRealm"/>
         <!-- 缓存管理器 -->
-        <property name="cacheManager" ref="shiroCacheManager" />
+        <!--<property name="cacheManager" ref="shiroCacheManager" />-->
+        <property name="cacheManager" ref="redisCacheManager"/>
+        <property name="sessionManager" ref="sessionManager"/>
     </bean>
  	<!--缓存管理器实现类，这里用的是系统自带的-->
-    <bean id="shiroCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
+    <!--<bean id="shiroCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>-->
     <!-- shiro filter -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <!-- 安全管理器必须的 -->
