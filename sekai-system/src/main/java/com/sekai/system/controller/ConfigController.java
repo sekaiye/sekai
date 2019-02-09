@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.sekai.system.redis.RedisClient;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -106,7 +107,8 @@ public class ConfigController {
 		fields.put("cfValue", "参数值");
 		ExportInfo export = new ExportInfo(fields, page.getSql());
 		session.setAttribute(exportId, export);
-
+		//RedisClient redis =new RedisClient();
+		//redis.set("fruit","banana");
 		Map<String, Object> mapJson = new HashMap<String, Object>();
 		mapJson.put("total", page.getTotalRecord());
 		mapJson.put("pageSize", pageSize);

@@ -50,8 +50,9 @@ public class RedisClient extends RedisManager{
                 jedis.expire(key, expire);
             }
         } catch (Exception e) {
-            LOGGER.error("redis key:{} set value:{} occur exception", new String(key), new String(value));
-            throw new RuntimeException("redis operation error:", e);
+            //LOGGER.error("redis key:{} set value:{} occur exception", new String(key), new String(value));
+           // System.out.println("K:"+new String(key) + " V:"+new String(value));
+            //throw new RuntimeException("redis operation error:", e);
         } finally {
             jedis.close();
         }

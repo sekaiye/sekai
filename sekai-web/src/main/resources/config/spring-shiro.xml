@@ -30,12 +30,9 @@
         <property name="sessionDAO" ref="redisSessionDAO"/>
         <property name="sessionIdCookie" ref="simpleCookie"/>
     </bean>
-    <!-- 安全管理器  ref对象-->
+    <!--Shiro`s main business-tier object for web-enable applications-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-    	<!--认证管理器-->
         <property name="realm" ref="shiroRealm"/>
-        <!-- 缓存管理器 -->
-        <!--<property name="cacheManager" ref="shiroCacheManager" />-->
         <property name="cacheManager" ref="redisCacheManager"/>
         <property name="sessionManager" ref="sessionManager"/>
     </bean>
@@ -59,7 +56,8 @@
     </bean>
     <!-- Shiro生命周期处理器 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"></bean>
+    <!--
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>
-    </bean>
+    </bean>-->
 </beans>
