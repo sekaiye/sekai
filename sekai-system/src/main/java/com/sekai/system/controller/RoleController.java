@@ -87,6 +87,7 @@ public class RoleController {
     @RequestMapping("/system/role/list")
     @RequiresPermissions("role_view")
     public String list(Model model, HttpServletRequest request)throws Exception{
+		System.out.println("role_list");
         return "system/role/role_list";
     }
     @RequestMapping("/system/role/getRoleList")
@@ -131,6 +132,7 @@ public class RoleController {
 		mapJson.put("total", page.getTotalRecord());
 		mapJson.put("pageSize", pageSize);
 		mapJson.put("rows", list);
+
 		return new ObjectMapper().writeValueAsString(mapJson);
     }
     @RequestMapping("/system/role/exportToExcel")

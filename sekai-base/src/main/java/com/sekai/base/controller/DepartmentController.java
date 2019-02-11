@@ -8,7 +8,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.sekai.system.redis.RedisUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,6 +29,8 @@ public class DepartmentController {
 	String exportId="export_department_list";
 	@Resource
 	DepartmentService departmentService;
+	@Autowired
+	RedisUtil util;
     @RequestMapping("/base/department/delete")
     @ResponseBody
     public JsonResult delete(HttpServletRequest request, Integer[] ids){
@@ -73,6 +77,7 @@ public class DepartmentController {
     @RequestMapping("/base/department/list")
     @RequiresPermissions("Department_view")
     public String list(Model model, HttpServletRequest request){
+		System.out.println("deptlist:");
         return "base/department/department_list";
     }
     @RequestMapping("/base/department/getDepartmentList")
@@ -85,6 +90,10 @@ public class DepartmentController {
     		@RequestParam(required=false) String keyword,
     		HttpServletRequest request, HttpSession session
     		) throws Exception{
+
+		util.set("hello","sekai");
+		System.out.println("dept:");
+		System.out.println("key:"+util.get("hello").toString());
 		Page<Department> page = new Page<Department>();
 		page.setPageNo(pageNumber);
 		page.setPageSize(pageSize);
