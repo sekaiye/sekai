@@ -30,7 +30,7 @@ public class DepartmentController {
 	@Resource
 	DepartmentService departmentService;
 	@Autowired
-	RedisUtil util;
+	RedisUtil redisUtil;
     @RequestMapping("/base/department/delete")
     @ResponseBody
     public JsonResult delete(HttpServletRequest request, Integer[] ids){
@@ -91,9 +91,6 @@ public class DepartmentController {
     		HttpServletRequest request, HttpSession session
     		) throws Exception{
 
-		util.set("hello","sekai");
-		System.out.println("dept:");
-		System.out.println("key:"+util.get("hello").toString());
 		Page<Department> page = new Page<Department>();
 		page.setPageNo(pageNumber);
 		page.setPageSize(pageSize);
@@ -113,8 +110,15 @@ public class DepartmentController {
 		fields.put("deptName", "部门名称");
 		fields.put("parentName", "上级部门");
 		fields.put("forbidName", "禁用状态");
-		ExportInfo export = new ExportInfo(fields, page.getSql());
-		session.setAttribute(exportId, export);
+		ExportInfo export = new ExportInfo();
+		export.setSql(page.getSql());
+		export.setExportFields(fields);
+		//session.setAttribute(exportId, export);
+		redisUtil.set(exportId,fields);
+
+
+		Map<String, String> export2 = (Map<String, String>)redisUtil.get(exportId);
+		System.out.println(export2.size());
 
 		Map<String, Object> mapJson = new HashMap<String, Object>();
 		mapJson.put("total", page.getTotalRecord());
