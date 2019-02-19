@@ -63,6 +63,7 @@ public class LoginController {
         String msg=null;
         try {
             subject.login(usernamePasswordToken);
+            System.out.println(subject.getSession().getId());
         }catch(UnknownAccountException e){
             msg="用户"+userName+"不存在!";
         }catch(IncorrectCredentialsException e){

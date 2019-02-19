@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.sekai.system.redis.RedisUtil;
+import com.sekai.system.shiro.ShiroUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,19 +78,22 @@ public class DepartmentController {
     }
     @RequestMapping("/base/department/list")
     @RequiresPermissions("Department_view")
-    public String list(Model model, HttpServletRequest request){
-		System.out.println("deptlist:");
+    public String list(Model model, HttpServletRequest request, HttpServletResponse response)
+			throws Exception{
+		ShiroUtil su=new ShiroUtil();
+		String str=su.getActiveUser(request.getParameter("sid").toString(),request,response);
+		System.out.println(str);
         return "base/department/department_list";
     }
     @RequestMapping("/base/department/getDepartmentList")
     @ResponseBody
     public String getDepartmentList(
-    		@RequestParam(required=true,defaultValue="1") Integer pageNumber,
-    		@RequestParam(required=false,defaultValue="100") Integer pageSize,
-    		@RequestParam(required=false) String sortOrder,
-    		@RequestParam(required=false) String sortName,
-    		@RequestParam(required=false) String keyword,
-    		HttpServletRequest request, HttpSession session
+			@RequestParam(required=true,defaultValue="1") Integer pageNumber,
+			@RequestParam(required=false,defaultValue="100") Integer pageSize,
+			@RequestParam(required=false) String sortOrder,
+			@RequestParam(required=false) String sortName,
+			@RequestParam(required=false) String keyword,
+			HttpServletRequest request, HttpServletResponse response
     		) throws Exception{
 
 		Page<Department> page = new Page<Department>();
@@ -117,8 +122,8 @@ public class DepartmentController {
 		redisUtil.set(exportId,fields);
 
 
-		Map<String, String> export2 = (Map<String, String>)redisUtil.get(exportId);
-		System.out.println(export2.size());
+		//Map<String, String> export2 = (Map<String, String>)redisUtil.get(exportId);
+		//System.out.println(export2.size());
 
 		Map<String, Object> mapJson = new HashMap<String, Object>();
 		mapJson.put("total", page.getTotalRecord());
