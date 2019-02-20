@@ -55,7 +55,7 @@ public class LoginController {
     	}*/
 
         Subject subject = SecurityUtils.getSubject();
-
+        subject.getSession().setAttribute("userName",userName);
         String newPwd = new EncryptUtils().Encode(pwd);
         //System.out.println(userName+" "+pwd+" \n"+newPwd);
         UsernamePasswordToken usernamePasswordToken = new
@@ -64,6 +64,8 @@ public class LoginController {
         try {
             subject.login(usernamePasswordToken);
             System.out.println(subject.getSession().getId());
+
+            //subject.getSession().setAttribute("userId","");
         }catch(UnknownAccountException e){
             msg="用户"+userName+"不存在!";
         }catch(IncorrectCredentialsException e){

@@ -30,7 +30,7 @@
 					isAdmin:${sessionScope.isAdmin}
 					<ul class="header-dropdown-menu">
 						<li><a href="javascript:openTab('修改密码','system/user/changeMyPwd.do');">修改密码</a></li>
-						<li><a href="logout.do">退出</a></li>
+						<li><a href="logout.do">注销</a></li>
 					</ul>
 				</li>
 				<li class="header-bar-nav"> 
