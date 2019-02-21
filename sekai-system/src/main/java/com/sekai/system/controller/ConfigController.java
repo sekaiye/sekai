@@ -8,7 +8,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -74,6 +76,10 @@ public class ConfigController {
     @RequestMapping("/system/config/list")
     @RequiresPermissions("config_view")
     public String list(Model model, HttpServletRequest request)throws Exception{
+		System.out.println("shiro:");
+		Subject subject = SecurityUtils.getSubject();
+		System.out.println("shiro session:");
+		System.out.println(subject.getSession().getAttribute("userName"));
         return "system/config/config_list";
     }
     @RequestMapping("/system/config/getConfigList")
