@@ -9,6 +9,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -91,12 +92,13 @@ public class LoginController {
         System.out.println(mylog);
 
         //生成会话状态
-        new LoginContext().createContext(session, user);
+        new LoginContext().createContext(user);
         shiroRealm.clearCache();
         return "redirect:/frame";
     }
     @RequestMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(){
+        Session session=SecurityUtils.getSubject().getSession();
         session.setAttribute("userId", null);
         session.setAttribute("userName", null);
         session.setAttribute("nickName", null);

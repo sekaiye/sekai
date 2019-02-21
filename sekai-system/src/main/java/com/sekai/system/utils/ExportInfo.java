@@ -1,8 +1,9 @@
 package com.sekai.system.utils;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class ExportInfo {
+public class ExportInfo implements Serializable {
 	Map<String, String> exportFields;
 	String sql;
 	

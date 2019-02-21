@@ -1,14 +1,16 @@
 package com.sekai.system.utils;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import javax.servlet.http.HttpSession;
-
 import com.sekai.system.model.User;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 
-public class LoginContext {
-	public void createContext(HttpSession session, User user) {
+public class LoginContext implements Serializable {
+	public void createContext(User user) {
+		Subject subject = SecurityUtils.getSubject();
+		org.apache.shiro.session.Session session=subject.getSession();
     	session.setAttribute("userId", user.getUserId());
     	session.setAttribute("userName", user.getUserName());
     	session.setAttribute("nickName", user.getNickName());
@@ -16,25 +18,25 @@ public class LoginContext {
     	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
     	session.setAttribute("loginDate", sdf.format(new Date()));
     	if(user.getUserName().equals("root")) {
-    		session.setAttribute("isAdmin", "1");
+    		session.setAttribute("isAdmin", "admin");
     	}
     	else {
     		session.setAttribute("isAdmin", null);
     	}
 	}
-	public Integer getUserId(HttpSession session) {
-		return Integer.valueOf(session.getAttribute("userId").toString());
+	public Integer getUserId() {
+		return Integer.valueOf(SecurityUtils.getSubject().getSession().getAttribute("userId").toString());
 	}
-	public String getnickName(HttpSession session) {
-		return session.getAttribute("nickName").toString();
+	public String getNickName() {
+		return SecurityUtils.getSubject().getSession().getAttribute("nickName").toString();
 	}
-	public String getLoginTime(HttpSession session) {
-		return session.getAttribute("loginTime").toString();
+	public String getLoginTime() {
+		return SecurityUtils.getSubject().getSession().getAttribute("loginTime").toString();
 	}
-	public String getLoginDate(HttpSession session) {
-		return session.getAttribute("loginDate").toString();
+	public String getLoginDate() {
+		return SecurityUtils.getSubject().getSession().getAttribute("loginDate").toString();
 	}
-	public Boolean isAdmin(HttpSession session) {
-		return Boolean.valueOf(session.getAttribute("isAdmin").toString());
+	public Boolean isAdmin() {
+		return Boolean.valueOf(SecurityUtils.getSubject().getSession().getAttribute("isAdmin").toString());
 	}
 }

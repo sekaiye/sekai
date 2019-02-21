@@ -60,7 +60,7 @@
         <!--<property name="sessionIdCookie" ref="sessionIdCookie" />-->
     </bean>
     <!-- 会话DAO -->
-    <bean id="sessionDAO" class="com.sekai.system.redis.RedisSessionDao">
+    <bean id="sessionDAO" class="com.sekai.system.redis.ShiroRedisSessionDao">
         <property name="redisTemplate" ref="redisObjectTemplate"></property>
     </bean>
     <bean id="redisObjectTemplate" class="org.springframework.data.redis.core.RedisTemplate">

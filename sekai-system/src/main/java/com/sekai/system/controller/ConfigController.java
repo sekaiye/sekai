@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
@@ -90,7 +88,7 @@ public class ConfigController {
     		@RequestParam(required=false) String sortOrder,
     		@RequestParam(required=false) String sortName,
     		@RequestParam(required=false) String keyword,
-    		HttpServletRequest request, HttpSession session
+    		HttpServletRequest request
     		) throws Exception{
 		Page<Config> page = new Page<Config>();
 		page.setPageNo(pageNumber);
@@ -111,7 +109,8 @@ public class ConfigController {
 		fields.put("cfName", "参数名称");
 		fields.put("cfValue", "参数值");
 		ExportInfo export = new ExportInfo(fields, page.getSql());
-		session.setAttribute(exportId, export);
+		Subject subject = SecurityUtils.getSubject();
+		subject.getSession().setAttribute(exportId, export);
 		//RedisClient redis =new RedisClient();
 		//redis.set("fruit","banana");
 		Map<String, Object> mapJson = new HashMap<String, Object>();

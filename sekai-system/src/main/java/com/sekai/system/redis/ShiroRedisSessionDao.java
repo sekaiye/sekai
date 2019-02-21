@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Administrator on 2017/6/30 0030.
  */
-public class RedisSessionDao extends AbstractSessionDAO {
+public class ShiroRedisSessionDao extends AbstractSessionDAO {
     private RedisTemplate redisTemplate;
 
     Logger log= LoggerFactory.getLogger(getClass());

@@ -19,6 +19,8 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,12 +37,12 @@ public class ExcelController {
 	
     @RequestMapping("/system/excel/excelExport")
     public String excelExport(HttpServletRequest request, HttpServletResponse response, 
-    		Model model, /*HttpSession session, */
+    		Model model,
     		String exportId, String downloadFileName) throws Exception{
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet=wb.createSheet("Sheet1");
-		//ExportInfo export = (ExportInfo)session.getAttribute(exportId);
-		ExportInfo export = (ExportInfo)redisUtil.get(exportId);
+		ExportInfo export = (ExportInfo)SecurityUtils.getSubject().getSession().getAttribute(exportId);
+
 		System.out.println(export.getSql());
 		HSSFRow row=sheet.createRow(0);
 		int i=0;

@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -97,8 +99,7 @@ public class RoleController {
     		@RequestParam(required=true) Integer pageSize,
     		@RequestParam(required=false) String sortOrder,
     		@RequestParam(required=false) String sortName,
-    		@RequestParam(required=false) String keyword,
-    		HttpServletRequest request, HttpSession session
+    		@RequestParam(required=false) String keyword
     		) throws Exception{
     	/*
     	Enumeration pNames=request.getParameterNames();  
@@ -126,8 +127,8 @@ public class RoleController {
 		fields.put("roleCode", "角色编码");
 		fields.put("roleName", "角色名称");
 		ExportInfo export = new ExportInfo(fields, page.getSql());
-		session.setAttribute(exportId, export);
-
+		SecurityUtils.getSubject().getSession().setAttribute(exportId, export);
+		System.out.println(exportId+":"+export.getSql());
 		Map<String, Object> mapJson = new HashMap<String, Object>();
 		mapJson.put("total", page.getTotalRecord());
 		mapJson.put("pageSize", pageSize);
