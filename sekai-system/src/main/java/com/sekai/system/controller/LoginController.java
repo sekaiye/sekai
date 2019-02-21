@@ -18,7 +18,7 @@ import com.sekai.system.service.MenuService;
 import com.sekai.system.service.UserService;
 import com.sekai.system.utils.EncryptUtils;
 import com.sekai.system.utils.LoginContext;
-import com.sekai.system.utils.ShiroRealm;
+import com.sekai.system.shiro.ShiroRealm;
 /*登录控制器*/
 @Controller
 public class LoginController {

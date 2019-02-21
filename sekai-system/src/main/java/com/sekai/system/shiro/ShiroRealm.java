@@ -1,4 +1,4 @@
-package com.sekai.system.utils;
+package com.sekai.system.shiro;
 
 import java.util.HashSet;
 import java.util.List;

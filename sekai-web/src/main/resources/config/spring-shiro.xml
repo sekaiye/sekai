@@ -10,7 +10,7 @@
     <!-- 使用spring组件扫描@service  -->
     <context:component-scan base-package="com.sekai.system.service"/>
     <!-- 自定义域realm -->
-    <bean id="shiroRealm" class="com.sekai.system.utils.ShiroRealm"></bean>
+    <bean id="shiroRealm" class="com.sekai.system.shiro.ShiroRealm"></bean>
     <!-- 安全管理器  ref对象-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <!--认证管理器-->
