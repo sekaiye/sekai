@@ -4,39 +4,33 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.sekai.system.model.User;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
+import com.sekai.system.redis.SessionUtil;
 
 public class LoginContext implements Serializable {
+	SessionUtil sessionUtil;
+	public LoginContext() {
+		sessionUtil =new SessionUtil(); 
+	}
 	public void createContext(User user) {
-		Subject subject = SecurityUtils.getSubject();
-		org.apache.shiro.session.Session session=subject.getSession();
-    	session.setAttribute("userId", user.getUserId());
-    	session.setAttribute("userName", user.getUserName());
-    	session.setAttribute("nickName", user.getNickName());
-    	session.setAttribute("loginTime", new Date());
+		sessionUtil.set("userId", user.getUserId());
+		sessionUtil.set("userName", user.getUserName());
+		sessionUtil.set("nickName", user.getNickName());
     	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-    	session.setAttribute("loginDate", sdf.format(new Date()));
+    	sessionUtil.set("loginDate", sdf.format(new Date()));
     	if(user.getUserName().equals("root")) {
-    		session.setAttribute("isAdmin", "admin");
+    		sessionUtil.set("isAdmin", "1");
     	}
     	else {
-    		session.setAttribute("isAdmin", null);
+    		sessionUtil.set("isAdmin", null);
     	}
 	}
 	public Integer getUserId() {
-		return Integer.valueOf(SecurityUtils.getSubject().getSession().getAttribute("userId").toString());
+		return Integer.valueOf(sessionUtil.get("userId").toString());
 	}
 	public String getNickName() {
-		return SecurityUtils.getSubject().getSession().getAttribute("nickName").toString();
-	}
-	public String getLoginTime() {
-		return SecurityUtils.getSubject().getSession().getAttribute("loginTime").toString();
-	}
-	public String getLoginDate() {
-		return SecurityUtils.getSubject().getSession().getAttribute("loginDate").toString();
+		return sessionUtil.get("nickName").toString();
 	}
 	public Boolean isAdmin() {
-		return Boolean.valueOf(SecurityUtils.getSubject().getSession().getAttribute("isAdmin").toString());
+		return Boolean.valueOf(sessionUtil.get("isAdmin").toString());
 	}
 }

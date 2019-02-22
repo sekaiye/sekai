@@ -56,17 +56,12 @@ public class LoginController {
     	}*/
 
         Subject subject = SecurityUtils.getSubject();
-        subject.getSession().setAttribute("userName",userName);
         String newPwd = new EncryptUtils().Encode(pwd);
-        //System.out.println(userName+" "+pwd+" \n"+newPwd);
         UsernamePasswordToken usernamePasswordToken = new
                 UsernamePasswordToken(userName,newPwd);
         String msg=null;
         try {
             subject.login(usernamePasswordToken);
-            System.out.println(subject.getSession().getId());
-
-            //subject.getSession().setAttribute("userId","");
         }catch(UnknownAccountException e){
             msg="用户"+userName+"不存在!";
         }catch(IncorrectCredentialsException e){
@@ -87,10 +82,7 @@ public class LoginController {
             model.addAttribute("msg","用户："+userName+"已被禁用！");
             return "login";
         }
-        String mylog = "登录："+user.getUserName();
-        logger.info(mylog);
-        System.out.println(mylog);
-
+        subject.getSession().setAttribute("userId", user.getUserId());
         //生成会话状态
         new LoginContext().createContext(user);
         shiroRealm.clearCache();
@@ -100,19 +92,15 @@ public class LoginController {
     public String logout(){
         Session session=SecurityUtils.getSubject().getSession();
         session.setAttribute("userId", null);
-        session.setAttribute("userName", null);
-        session.setAttribute("nickName", null);
-        session.setAttribute("loginDate", null);
-        session.setAttribute("isAdmin", null);
         shiroRealm.logOut();
         return "redirect:/login";
     }
     @RequestMapping("/frame")
-    public String frame(Model model,HttpServletRequest request,HttpSession session){
-        if(session.getAttribute("userName") == null){
+    public String frame(Model model,HttpServletRequest request){
+        if(SecurityUtils.getSubject().getSession().getAttribute("userId") == null){
             return "redirect:/login";
         }
-        String systemMenu = menuService.getSystemMenu(session);
+        String systemMenu = menuService.getSystemMenu();
         model.addAttribute("systemMenu",systemMenu);
         return "/system/frame/index";
     }

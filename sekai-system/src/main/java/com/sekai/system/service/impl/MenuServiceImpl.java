@@ -25,7 +25,7 @@ public class MenuServiceImpl implements MenuService {
     public List<Menu> getAllMenus(String parentCode){
     	return this.mapper.getAllMenus(parentCode);
     }
-    public String getSystemMenu(HttpSession session){
+    public String getSystemMenu(){
     	String systemMenu="";
     	List<Menu> menus = getAllMenus("root");
     	for(Menu menu : menus) {
