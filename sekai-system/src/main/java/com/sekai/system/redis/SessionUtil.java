@@ -1,15 +1,17 @@
 package com.sekai.system.redis;
 
 import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class SessionUtil {
 	private String sessionId;
+	@Autowired
 	private RedisUtil redisUtil;
 	private String sessionIdPrefix="sid-";
 	public SessionUtil() {
-		sessionId="123-";
-		//sessionId=SecurityUtils.getSubject().getSession().getId().toString();
-		redisUtil=new RedisUtil();
+		
+		sessionId=SecurityUtils.getSubject().getSession().getId().toString();
+		//redisUtil=new RedisUtil();
 	}
 	public void set(String key,Object value) {
     	

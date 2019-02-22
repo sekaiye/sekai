@@ -11,6 +11,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,13 +33,20 @@ public class LoginController {
     private UserService userService;
     @Resource
     private MenuService menuService;
+    @Autowired
+    private RedisUtil redisUtil;
     @RequestMapping("/")
     public String welcome(){
-    	System.out.println("welcome5()");
-    	RedisUtil redisUtil=new RedisUtil();
-    	redisUtil.set("my","cc");
-    	//User u2=(User)redisUtil.get("my");
-    	System.out.println("u2:"+redisUtil.get("my").toString());
+    	System.out.println("welcome9()");
+    	User u = new User();
+    	u.setUserId(1);
+    	u.setUserName("feelin林");
+    	redisUtil.set("wa",u);
+    	//String ss=redisUtil.get("wa").toString(); 
+    	//System.out.println("wa:"+ss);
+    	
+    	User u2=(User)redisUtil.get("wa");
+    	System.out.println("u2:"+u2.getUserName());
         return "redirect:/login";
     }
     @RequestMapping("/login")

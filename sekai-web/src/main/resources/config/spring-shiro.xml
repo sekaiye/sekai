@@ -63,6 +63,9 @@
     <bean id="sessionDAO" class="com.sekai.system.redis.ShiroRedisSessionDao">
         <property name="redisTemplate" ref="redisObjectTemplate"></property>
     </bean>
+    <bean id="redisUtil" class="com.sekai.system.redis.RedisUtil">
+        <property name="redisTemplate" ref="redisObjectTemplate" />
+    </bean>
     <bean id="redisObjectTemplate" class="org.springframework.data.redis.core.RedisTemplate">
         <property name="connectionFactory" ref="jedisConnectionFactory"/>
         <!--如果不配置Serializer，那么存储的时候缺省使用String，如果用User类型存储，那么会提示错误User can't cast to String！！  -->
@@ -96,8 +99,5 @@
         <property name="usePool" value="true"></property>
         <property name="password" value="123456" />
         <property name="database" value="10"/>
-    </bean>
-    <bean id="redisUtil" class="com.sekai.system.redis.RedisUtil">
-        <property name="redisTemplate" ref="redisObjectTemplate" />
     </bean>
 </beans>
