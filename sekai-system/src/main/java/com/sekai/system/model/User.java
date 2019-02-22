@@ -1,7 +1,10 @@
 package com.sekai.system.model;
 
-public class User {
-    private Integer userId;
+import java.io.Serializable;
+
+public class User implements Serializable{
+	//private static final long serialVersionUID = 3570647163473700250L;
+	private Integer userId;
 	private String userName;
     private String nickName;
     private String pwd;

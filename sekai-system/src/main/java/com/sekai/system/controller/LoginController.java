@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.sekai.system.model.User;
+import com.sekai.system.redis.RedisUtil;
+import com.sekai.system.redis.SessionUtil;
 import com.sekai.system.service.MenuService;
 import com.sekai.system.service.UserService;
 import com.sekai.system.utils.EncryptUtils;
@@ -32,7 +34,11 @@ public class LoginController {
     private MenuService menuService;
     @RequestMapping("/")
     public String welcome(){
-
+    	System.out.println("welcome5()");
+    	RedisUtil redisUtil=new RedisUtil();
+    	redisUtil.set("my","cc");
+    	//User u2=(User)redisUtil.get("my");
+    	System.out.println("u2:"+redisUtil.get("my").toString());
         return "redirect:/login";
     }
     @RequestMapping("/login")
@@ -82,22 +88,21 @@ public class LoginController {
             model.addAttribute("msg","用户："+userName+"已被禁用！");
             return "login";
         }
-        subject.getSession().setAttribute("userId", user.getUserId());
+        model.addAttribute("user",user);
         //生成会话状态
         new LoginContext().createContext(user);
-        shiroRealm.clearCache();
+        //shiroRealm.clearCache();
         return "redirect:/frame";
     }
     @RequestMapping("/logout")
     public String logout(){
-        Session session=SecurityUtils.getSubject().getSession();
-        session.setAttribute("userId", null);
+    	new LoginContext().logOut();
         shiroRealm.logOut();
         return "redirect:/login";
     }
     @RequestMapping("/frame")
     public String frame(Model model,HttpServletRequest request){
-        if(SecurityUtils.getSubject().getSession().getAttribute("userId") == null){
+        if(new LoginContext().getUser() == null){
             return "redirect:/login";
         }
         String systemMenu = menuService.getSystemMenu();

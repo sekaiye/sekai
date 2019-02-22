@@ -24,10 +24,9 @@
 			<span class="header-logo">系统框架</span> 
 			<a class="header-menu-btn" href="javascript:;"><i class="icon-font">&#xe600;</i></a>
 			<ul class="header-bar">
-				<li class="header-bar-role"><a href="javascript:;">${sessionScope.nickName}</a></li>
+				<li class="header-bar-role"><a href="javascript:;">${user.nickName}</a></li>
 				<li class="header-bar-nav">
-					<a href="javascript:;">${sessionScope.userName}<i class="icon-font" style="margin-left:5px;">&#xe60c;</i></a>
-					isAdmin:${sessionScope.isAdmin}
+					<a href="javascript:;">${user.userName}<i class="icon-font" style="margin-left:5px;">&#xe60c;</i></a>
 					<ul class="header-dropdown-menu">
 						<li><a href="javascript:openTab('修改密码','system/user/changeMyPwd.do');">修改密码</a></li>
 						<li><a href="logout.do">注销</a></li>

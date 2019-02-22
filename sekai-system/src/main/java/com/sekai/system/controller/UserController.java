@@ -183,7 +183,7 @@ public class UserController {
     		model.addAttribute("action_result","两次密码输入不一致！");
     		return url;
     	}
-    	Integer userId = new LoginContext().getUserId();
+    	Integer userId = new LoginContext().getUser().getUserId();
     	if(userId == null || userId == 0) {
     		model.addAttribute("action_result","获取用户Id失败！");
     		return url;

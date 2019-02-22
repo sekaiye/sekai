@@ -23,6 +23,7 @@ import com.sekai.system.model.User;
 import com.sekai.system.service.PermissionService;
 import com.sekai.system.service.RoleService;
 import com.sekai.system.service.UserService;
+import com.sekai.system.utils.LoginContext;
 
 public class ShiroRealm extends AuthorizingRealm{
     //private static final Logger logger = LoggerFactory.getLogger(ShiroRealm.class);
@@ -37,9 +38,7 @@ public class ShiroRealm extends AuthorizingRealm{
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        //logger.info("======用户授权认证======");
-    	System.out.println("doGetAuthorizationInfo");
-        Integer userId=Integer.valueOf(SecurityUtils.getSubject().getSession().getAttribute("userId").toString());
+        Integer userId=new LoginContext().getUser().getUserId();
         String userName = principalCollection.getPrimaryPrincipal().toString();
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         List<Role> roles = null;
@@ -73,19 +72,14 @@ public class ShiroRealm extends AuthorizingRealm{
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        //logger.info("======用户登陆认证======");
-        System.out.println("doGetAuthenticationInfo begin");
         String userName = authenticationToken.getPrincipal().toString();
-        System.out.println("getPrincipal："+userName);
         User user=null;
         try{
             user = userService.getUserByUserName(userName);
         }catch(Exception err){
             System.out.println(err.getMessage());
         }
-        System.out.println("doGetAuthenticationInfo user==null");
         if (user!=null) {
-            System.out.println("doGetAuthenticationInfo user!=null");
             AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(user.getUserName(), user.getPwd(), getName());
             return authenticationInfo;
         }

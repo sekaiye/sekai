@@ -7,30 +7,30 @@ import com.sekai.system.model.User;
 import com.sekai.system.redis.SessionUtil;
 
 public class LoginContext implements Serializable {
+	/**
+	 * 登录用户上下文
+	 */
+	//private static final long serialVersionUID = -6691954500023444723L;
 	SessionUtil sessionUtil;
 	public LoginContext() {
 		sessionUtil =new SessionUtil(); 
 	}
 	public void createContext(User user) {
-		sessionUtil.set("userId", user.getUserId());
-		sessionUtil.set("userName", user.getUserName());
-		sessionUtil.set("nickName", user.getNickName());
-    	SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-    	sessionUtil.set("loginDate", sdf.format(new Date()));
-    	if(user.getUserName().equals("root")) {
-    		sessionUtil.set("isAdmin", "1");
-    	}
-    	else {
-    		sessionUtil.set("isAdmin", null);
-    	}
+		sessionUtil.set("loginUser", user);
 	}
-	public Integer getUserId() {
-		return Integer.valueOf(sessionUtil.get("userId").toString());
+	public void logOut() {
+		sessionUtil.set("loginUser", null);
 	}
-	public String getNickName() {
-		return sessionUtil.get("nickName").toString();
+	public User getUser() {
+		Object obj=sessionUtil.get("loginUser");
+		if(obj!=null)
+			return (User)obj;
+		return null;
+		
 	}
 	public Boolean isAdmin() {
-		return Boolean.valueOf(sessionUtil.get("isAdmin").toString());
+		if(this.getUser().getUserName().equals("root"))
+			return true;
+		return false;
 	}
 }
