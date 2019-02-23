@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.sekai.system.redis.RedisUtil;
+import com.sekai.system.redis.SessionUtil;
 import com.sekai.system.shiro.ShiroUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class DepartmentController {
 	@Resource
 	DepartmentService departmentService;
 	@Autowired
-	RedisUtil redisUtil;
+	SessionUtil sessionUtil;
     @RequestMapping("/base/department/delete")
     @ResponseBody
     public JsonResult delete(HttpServletRequest request, Integer[] ids){
@@ -80,9 +81,10 @@ public class DepartmentController {
     @RequiresPermissions("Department_view")
     public String list(Model model, HttpServletRequest request, HttpServletResponse response)
 			throws Exception{
+    	/*
 		ShiroUtil su=new ShiroUtil();
 		String str=su.getActiveUser(request.getParameter("sid").toString(),request,response);
-		System.out.println(str);
+		System.out.println(str);*/
         return "base/department/department_list";
     }
     @RequestMapping("/base/department/getDepartmentList")
@@ -119,7 +121,7 @@ public class DepartmentController {
 		export.setSql(page.getSql());
 		export.setExportFields(fields);
 		//session.setAttribute(exportId, export);
-		redisUtil.set(exportId,fields);
+		sessionUtil.set(exportId,fields);
 
 
 		//Map<String, String> export2 = (Map<String, String>)redisUtil.get(exportId);

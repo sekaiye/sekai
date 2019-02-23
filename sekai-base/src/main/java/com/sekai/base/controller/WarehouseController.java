@@ -8,7 +8,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.sekai.system.redis.SessionUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,6 +27,8 @@ import com.sekai.system.utils.Page;
 @Controller
 public class WarehouseController {
 	String exportId="export_warehouse_list";
+	@Autowired
+	private SessionUtil sessionUtil;
 	@Resource
 	private WarehouseService WarehouseService;
     @RequestMapping("/base/warehouse/delete")
@@ -81,7 +85,7 @@ public class WarehouseController {
     		@RequestParam(required=false) String sortOrder,
     		@RequestParam(required=false) String sortName,
     		@RequestParam(required=false) String keyword,
-    		HttpServletRequest request, HttpSession session
+    		HttpServletRequest request
     		) throws Exception{
 		Page<Warehouse> page = new Page<Warehouse>();
 		page.setPageNo(pageNumber);
@@ -101,7 +105,7 @@ public class WarehouseController {
 		fields.put("whCode", "仓库编码");
 		fields.put("whName", "仓库名称");
 		ExportInfo export = new ExportInfo(fields, page.getSql());
-		session.setAttribute(exportId, export);
+		sessionUtil.set(exportId, export);
 
 		Map<String, Object> mapJson = new HashMap<String, Object>();
 		mapJson.put("total", page.getTotalRecord());

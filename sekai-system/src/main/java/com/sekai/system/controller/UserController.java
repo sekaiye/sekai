@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.sekai.file.utils.POIUtil;
+import com.sekai.system.redis.SessionUtil;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,6 +35,8 @@ import com.sekai.system.utils.Page;
 @Controller
 public class UserController {
 	String exportId = "export_user_list";
+	@Autowired
+	private SessionUtil sessionUtil;
 	@Resource
 	UserService userService;
 	@Resource
@@ -132,7 +136,7 @@ public class UserController {
     		@RequestParam(required=false) String sortOrder,
     		@RequestParam(required=false) String sortName,
     		@RequestParam(required=false) String keyword,
-    		HttpServletRequest request, HttpSession session
+    		HttpServletRequest request
     		) throws Exception{
 		Page<User> page = new Page<User>();
 		page.setPageNo(pageNumber);
@@ -155,7 +159,7 @@ public class UserController {
 		fields.put("cellphone", "手机");
 		fields.put("forbid", "禁用状态");
 		ExportInfo export = new ExportInfo(fields, page.getSql());
-		session.setAttribute(exportId, export);
+		sessionUtil.set(exportId, export);
 
 		Map<String, Object> mapJson = new HashMap<String, Object>();
 		mapJson.put("total", page.getTotalRecord());

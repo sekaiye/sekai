@@ -8,7 +8,10 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import com.sekai.system.redis.SessionUtil;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,6 +33,8 @@ import com.sekai.system.utils.Page;
 @Controller
 public class InoutController {
 	String exportId = "export_role_list";
+	@Autowired
+	private SessionUtil sessionUtil;
 	@Resource
 	private InoutService inoutService;
 	@Resource
@@ -96,7 +101,7 @@ public class InoutController {
     		@RequestParam(required=false) String sortOrder,
     		@RequestParam(required=false) String sortName,
     		@RequestParam(required=false) String keyword,
-    		HttpServletRequest request, HttpSession session
+    		HttpServletRequest request
     		) throws Exception{
 		Page<Inout> page = new Page<Inout>();
 		page.setPageNo(pageNumber);
@@ -117,7 +122,7 @@ public class InoutController {
 		fields.put("createDate", "创建日期");
 		fields.put("whName", "仓库名称");
 		ExportInfo export = new ExportInfo(fields, page.getSql());
-		session.setAttribute(exportId, export);
+		sessionUtil.set(exportId, export);
 
 		Map<String, Object> mapJson = new HashMap<String, Object>();
 		mapJson.put("total", page.getTotalRecord());

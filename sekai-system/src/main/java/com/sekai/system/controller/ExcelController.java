@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.sekai.system.redis.RedisUtil;
+import com.sekai.system.redis.SessionUtil;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
@@ -31,7 +32,7 @@ import com.sekai.system.utils.ExportInfo;
 @Controller
 public class ExcelController {
 	@Autowired
-	RedisUtil redisUtil;
+	private SessionUtil sessionUtil;
 	@Resource
 	private DirectSqlService directSqlService;
 	
@@ -41,9 +42,7 @@ public class ExcelController {
     		String exportId, String downloadFileName) throws Exception{
 		HSSFWorkbook wb = new HSSFWorkbook();
 		HSSFSheet sheet=wb.createSheet("Sheet1");
-		ExportInfo export = (ExportInfo)SecurityUtils.getSubject().getSession().getAttribute(exportId);
-
-		System.out.println(export.getSql());
+		ExportInfo export = (ExportInfo)sessionUtil.get(exportId);
 		HSSFRow row=sheet.createRow(0);
 		int i=0;
 		for (String colName : export.getExportFields().values()) {

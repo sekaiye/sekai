@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import com.sekai.system.redis.SessionUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,6 +28,8 @@ import com.sekai.system.utils.Page;
 @Controller
 public class ConfigController {
 	String exportId="export_config_list";
+	@Autowired
+	private SessionUtil sessionUtil;
 	@Resource
 	ConfigService configService;
     @RequestMapping("/system/config/delete")
@@ -109,8 +114,7 @@ public class ConfigController {
 		fields.put("cfName", "参数名称");
 		fields.put("cfValue", "参数值");
 		ExportInfo export = new ExportInfo(fields, page.getSql());
-		Subject subject = SecurityUtils.getSubject();
-		subject.getSession().setAttribute(exportId, export);
+		sessionUtil.set(exportId, export);
 		//RedisClient redis =new RedisClient();
 		//redis.set("fruit","banana");
 		Map<String, Object> mapJson = new HashMap<String, Object>();

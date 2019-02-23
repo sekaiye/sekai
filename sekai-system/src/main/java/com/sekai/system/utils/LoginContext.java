@@ -8,7 +8,6 @@ import com.sekai.system.redis.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
 public class LoginContext implements Serializable {
 	/**
 	 * 登录用户上下文

@@ -8,6 +8,9 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import com.sekai.system.redis.SessionUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -31,6 +34,8 @@ import com.sekai.system.utils.Page;
 @Controller
 public class UserRoleController {
 	String exportId = "export_user_role_list";
+	@Autowired
+	private SessionUtil sessionUtil;
 	@Resource
 	private UserRoleService userRoleService;
 	@Resource
@@ -106,7 +111,7 @@ public class UserRoleController {
     		@RequestParam(required=false) String sortOrder,
     		@RequestParam(required=false) String sortName,
     		@RequestParam(required=false) String keyword,
-    		HttpServletRequest request, HttpSession session
+    		HttpServletRequest request
     		) throws Exception{
 		Page<UserRole> page = new Page<UserRole>();
 		page.setPageNo(pageNumber);
@@ -128,7 +133,7 @@ public class UserRoleController {
 		fields.put("roleCode", "角色编码");
 		fields.put("roleName", "角色名称");
 		ExportInfo export = new ExportInfo(fields, page.getSql());
-		session.setAttribute(exportId, export);
+		sessionUtil.set(exportId, export);
 
 		Map<String, Object> mapJson = new HashMap<String, Object>();
 		mapJson.put("total", page.getTotalRecord());

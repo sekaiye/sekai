@@ -8,8 +8,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.sekai.system.redis.SessionUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,6 +28,8 @@ import com.sekai.system.utils.Page;
 @Controller
 public class RoleController {
 	String exportId = "export_role_list";
+	@Autowired
+	private SessionUtil sessionUtil;
 	@Resource
 	RoleService roleService;
     @RequestMapping("/system/role/delete")
@@ -127,8 +131,7 @@ public class RoleController {
 		fields.put("roleCode", "角色编码");
 		fields.put("roleName", "角色名称");
 		ExportInfo export = new ExportInfo(fields, page.getSql());
-		SecurityUtils.getSubject().getSession().setAttribute(exportId, export);
-		System.out.println(exportId+":"+export.getSql());
+		sessionUtil.set(exportId, export);
 		Map<String, Object> mapJson = new HashMap<String, Object>();
 		mapJson.put("total", page.getTotalRecord());
 		mapJson.put("pageSize", pageSize);
