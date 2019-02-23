@@ -33,12 +33,14 @@ public class ShiroRealm extends AuthorizingRealm{
     private RoleService roleService;
     @Autowired
     private PermissionService permissionService;
+    @Autowired
+    private LoginContext loginContext;
     /**
      * 用户授权认证
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        Integer userId=new LoginContext().getUser().getUserId();
+        Integer userId=loginContext.getUser().getUserId();
         String userName = principalCollection.getPrimaryPrincipal().toString();
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         List<Role> roles = null;

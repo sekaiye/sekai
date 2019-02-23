@@ -33,19 +33,21 @@ public class LoginController {
     private UserService userService;
     @Resource
     private MenuService menuService;
+    //@Autowired
+    //private RedisUtil redisUtil;
     @Autowired
-    private RedisUtil redisUtil;
+    private SessionUtil sessionUtil;
+    @Autowired
+    private LoginContext loginContext;
     @RequestMapping("/")
     public String welcome(){
-    	System.out.println("welcome9()");
-    	User u = new User();
-    	u.setUserId(1);
-    	u.setUserName("feelin林");
-    	redisUtil.set("wa",u);
-    	//String ss=redisUtil.get("wa").toString(); 
-    	//System.out.println("wa:"+ss);
-    	
-    	User u2=(User)redisUtil.get("wa");
+    	System.out.println("welcome10()");
+    	User user = new User();
+        user.setUserId(1);
+        user.setUserName("feelin");
+
+        loginContext.createContext(user);
+        User u2 = loginContext.getUser();
     	System.out.println("u2:"+u2.getUserName());
         return "redirect:/login";
     }
@@ -96,23 +98,25 @@ public class LoginController {
             model.addAttribute("msg","用户："+userName+"已被禁用！");
             return "login";
         }
-        model.addAttribute("user",user);
+
         //生成会话状态
-        new LoginContext().createContext(user);
+        loginContext.createContext(user);
         //shiroRealm.clearCache();
         return "redirect:/frame";
     }
     @RequestMapping("/logout")
     public String logout(){
-    	new LoginContext().logOut();
+    	loginContext.logOut();
         shiroRealm.logOut();
         return "redirect:/login";
     }
     @RequestMapping("/frame")
     public String frame(Model model,HttpServletRequest request){
-        if(new LoginContext().getUser() == null){
+        User user=loginContext.getUser();
+        if(user == null){
             return "redirect:/login";
         }
+        model.addAttribute("user",user);
         String systemMenu = menuService.getSystemMenu();
         model.addAttribute("systemMenu",systemMenu);
         return "/system/frame/index";

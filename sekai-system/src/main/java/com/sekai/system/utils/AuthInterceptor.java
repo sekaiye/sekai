@@ -4,15 +4,18 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
-    
+	@Autowired
+	private LoginContext loginContext;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    	Object user = request.getSession().getAttribute("userId");
+    	Object user = loginContext.getUser().getUserId();
     	if (user == null) {
     		if(request.getHeader("X-Requested-With") != null) {
 	    		//ajax类型的登录提示

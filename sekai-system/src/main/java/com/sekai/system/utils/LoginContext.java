@@ -5,15 +5,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import com.sekai.system.model.User;
 import com.sekai.system.redis.SessionUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LoginContext implements Serializable {
 	/**
 	 * 登录用户上下文
 	 */
-	//private static final long serialVersionUID = -6691954500023444723L;
+	private static final long serialVersionUID = -6691954500023444723L;
+	@Autowired
 	SessionUtil sessionUtil;
-	public LoginContext() {
-		sessionUtil =new SessionUtil(); 
+
+	public void setSessionUtil(SessionUtil sessionUtil) {
+		this.sessionUtil = sessionUtil;
 	}
 	public void createContext(User user) {
 		sessionUtil.set("loginUser", user);
