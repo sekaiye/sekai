@@ -17,7 +17,7 @@
         <property name="realm" ref="shiroRealm"/>
         <!-- 缓存管理器 -->
         <property name="cacheManager" ref="shiroCacheManager" />
-        <property name="sessionManager" ref="sessionManager"></property>
+        <!--<property name="sessionManager" ref="sessionManager"></property>-->
     </bean>
     <!--缓存管理器实现类，这里用的是系统自带的-->
     <bean id="shiroCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager"/>
@@ -66,9 +66,12 @@
     <bean id="redisUtil" class="com.sekai.system.redis.RedisUtil">
         <property name="redisTemplate" ref="redisObjectTemplate" />
     </bean>
-    <bean id="sessionUtil" class="com.sekai.system.redis.SessionUtil">
-        <property name="redisUtil" ref="redisUtil" />
+    <bean id="sessionUtil" class="com.sekai.system.redis.SessionUtilWeb">
     </bean>
+    <!--
+    <bean id="sessionUtil" class="com.sekai.system.redis.SessionUtilRedis">
+        <property name="redisUtil" ref="redisUtil" />
+    </bean>-->
     <bean id="loginContext" class="com.sekai.system.utils.LoginContext">
         <property name="sessionUtil" ref="sessionUtil" />
     </bean>
